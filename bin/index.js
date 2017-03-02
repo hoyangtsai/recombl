@@ -13,3 +13,7 @@ if (argv['watch'] || argv['w'] || argv['_'].includes('dev')) {
   console.log('start dev');
   // require('../lib/server');
 }
+
+if (argv['_'].includes('update')) {
+  console.log('update config');
+}
