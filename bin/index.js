@@ -10,8 +10,8 @@ if (argv['add'] || argv['a'] || argv['_'].includes('add')) {
 }
 
 if (argv['watch'] || argv['w'] || argv['_'].includes('dev')) {
-  console.log('start dev');
-  // require('../lib/server');
+  // console.log('start dev');
+  require('../lib/server');
 }
 
 if (argv['_'].includes('update')) {
