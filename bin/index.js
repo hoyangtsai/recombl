@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-require('babel-core/register');
+require('babel-register');
 
 const argv = require('minimist')(process.argv.slice(2));
 
@@ -17,3 +17,5 @@ if (argv['watch'] || argv['w'] || argv['_'].includes('dev')) {
 if (argv['_'].includes('update')) {
   console.log('update config');
 }
+
+require('../lib/server');
