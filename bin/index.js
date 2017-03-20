@@ -4,7 +4,7 @@ require('babel-register');
 
 const argv = require('minimist')(process.argv.slice(2));
 
-if (argv['add'] || argv['a'] || argv['_'].includes('add')) {
+if (argv['add'] || argv['_'].includes('add')) {
   console.log('add template');
   // require('../lib/add');
 }
