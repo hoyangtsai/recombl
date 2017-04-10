@@ -8,11 +8,6 @@ process.env.MODULE_PATH = path.resolve(__dirname, '../node_modules');
 if (argv['watch'] || argv['w'] || argv['_'].includes('dev')) {
   process.env.DEV = true;
   require('../lib/server');
-} else if (argv['add'] || argv['_'].includes('add')) {
-  console.log('add template');
-  // require('../lib/add');
+} else if (argv['new'] || argv['_'].includes('new')) {
+  require('../lib/new');
 }
-
-// else {
-//   require('../lib/webpack');
-// }
