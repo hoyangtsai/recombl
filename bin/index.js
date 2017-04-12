@@ -10,4 +10,6 @@ if (argv['watch'] || argv['w'] || argv['_'].includes('dev')) {
   require('../lib/server');
 } else if (argv['new'] || argv['_'].includes('new')) {
   require('../lib/new');
+} else if ( argv['publish'] || argv['p']  || argv['_'].includes('publish') ) {
+  require('../lib/publish');
 }
