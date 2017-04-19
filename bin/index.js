@@ -5,7 +5,7 @@ const argv = require('minimist')(process.argv.slice(2));
 
 process.env.MODULE_PATH = path.resolve(__dirname, '../node_modules');
 process.env.DEV_DIR = '_tmp';
-process.env.PUBLISH_DIR = 'publish_comby';
+process.env.PUBLISH_DIR = 'publish';
 
 if (argv['watch'] || argv['w'] || argv['_'].includes('dev')) {
   process.env.DEV = true;

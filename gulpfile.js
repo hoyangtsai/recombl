@@ -44,7 +44,7 @@ let componentResourcePath;//组件资源在dist的目录
 gulp.task('css_img', function (done) {
   let opts = {
     stylesheetPath: path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css'),
-    spritePath: path.join(process.env.PWD, process.env.PUBLISH_DIR, 'img', userConfig.path) + '/',
+    spritePath: path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image', userConfig.path) + '/',
     spritesmith: baseConfig.sprites.spritesmith,
     retina:  baseConfig.sprites.retina,
     hooks: false,
@@ -91,12 +91,12 @@ gulp.task('css_img', function (done) {
         maxImageSize: 100*1024,
         debug: false
       }))
-      .pipe(replace(/url\([^_:\n\r]+\/img\//gi, function(match) {
+      .pipe(replace(/url\([^_:\n\r]+\/image\//gi, function(match) {
           let str = match.toLowerCase();
           if (str.indexOf('url(//') > -1) {
             return match;
           }
-          return 'url('+layerPath+'img/';
+          return 'url('+layerPath+'image/';
       }))//更正图片路径
       .pipe(replace(/url\([^_:\n\r]+\/font\//gi, function(match) {
           var str = match.toLowerCase();
@@ -131,14 +131,14 @@ gulp.task('css_img', function (done) {
 });
 
 gulp.task('cp_img', ['css_img'], function (done) {
-  gulp.src(path.join(process.env.PWD, 'src/img', baseConfig.path, '**'))
-      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'img', baseConfig.path) + '/'));
-  return gulp.src([path.join(process.env.PWD, 'src/img/common/**')])
-      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'img/common')));
+  gulp.src(path.join(process.env.PWD, 'client/image', baseConfig.path, '**'))
+      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image', baseConfig.path)));
+  return gulp.src([path.join(process.env.PWD, 'client/image/common/**')])
+      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image/common')));
 });
 
 gulp.task('cp_font', function (done) {
-  return gulp.src(path.join(process.env.PWD, 'src/image/font', baseConfig.path, '**'))
+  return gulp.src(path.join(process.env.PWD, 'client/image/font', baseConfig.path, '**'))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'font', baseConfig.path)));
 });
 
@@ -152,7 +152,7 @@ gulp.task('cp_component', ['css_img'], function (done) {
 });
 
 gulp.task('cp_js', ['css_img'], function (done) {
-  let filePath = ['!' + path.join(process.env.PWD, 'dist/react.js')];
+  let filePath = ['!' + path.join(process.env.PWD, process.env.DEV_DIR, 'react.js')];
   if (!Array.isArray(baseConfig.entry)) {
     filePath.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.js'));
   } else {
@@ -168,12 +168,12 @@ gulp.task('cp_html', ['css_img'], function (done) {
       path.join(process.env.PWD, baseConfig.htmlPath, baseConfig.path, '**/*.html')
 
   return gulp.src(filePath)
-      .pipe(replace(/dist\/.+\.js\.css/g, function(match) {
+      .pipe(replace(/_tmp\/.+\.js\.css/g, function(match) {
           var newStr = match.replace(".js.css", ".css");
           return newStr;
       }))
-      .pipe(replace(/\.\.\/dist\/.+\.js/g, function(match) {
-          var newStr = match.replace("../dist/", "js/");
+      .pipe(replace(/\.\.\/_tmp\/.+\.js/g, function(match) {
+          var newStr = match.replace("../_tmp/", "js/");
           return newStr;
       }))
       .pipe(replace(/<!--__css__/g, function(match) {
@@ -197,11 +197,11 @@ gulp.task('cp_jade_to_html', ['css_img'], function (done) {
     path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.jade')
 
   return gulp.src(filePath)
-      .pipe(replace(/dist\/.+\.js\.css/g, function(match) {
+      .pipe(replace(/_tmp\/.+\.js\.css/g, function(match) {
         return match.replace(".js.css", ".css");
       }))
-      .pipe(replace(/\.\.\/dist\/.+\.js/g, function(match) {
-        return match.replace("../dist/", "js/");
+      .pipe(replace(/\.\.\/_tmp\/.+\.js/g, function(match) {
+        return match.replace("../_tmp/", "js/");
       }))
       .pipe(replace(/<!--__css__/g, function(match) {
         return "";
@@ -269,7 +269,7 @@ gulp.task('del_zip', ['upload_zip'], function() {
 });
 
 //构建到publish
-gulp.task('publish', ['css_img', 'cp_js', 'cp_jade_to_html'], function (done) {
+gulp.task('publish', ['css_img', 'cp_img', 'cp_font', 'cp_js', 'cp_jade_to_html'], function (done) {
   console.log("Finished publish...");
   console.log("Success!");
 });
@@ -363,7 +363,7 @@ cndFileObj.cndFileList = new Set();
 
 //项目中需上传CND的文件 按文件夹
 gulp.task('folder_cdn', function() {
-  let files = getAllFiles('./publish/img'+config.samePath);
+  let files = getAllFiles('./publish/image'+config.samePath);
   files = files.concat(getAllFiles('./publish/font'+config.samePath));
   files = files.concat(getAllFiles('./publish/asset'+config.samePath));
   files.map(x => cndFileObj.cndFileList.add(x));
