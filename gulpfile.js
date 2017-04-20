@@ -152,7 +152,8 @@ gulp.task('cp_component', ['css_img'], function (done) {
 });
 
 gulp.task('cp_js', ['css_img'], function (done) {
-  let filePath = ['!' + path.join(process.env.PWD, process.env.DEV_DIR, 'react.js')];
+  let filePath = ['!' + path.join(process.env.PWD, process.env.DEV_DIR, 'react.js'),
+    path.join(__dirname, 'lib/react/react.js')];
   if (!Array.isArray(baseConfig.entry)) {
     filePath.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.js'));
   } else {
