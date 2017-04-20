@@ -4,7 +4,7 @@ module.exports = {
   htmlPath: "client/html",
   alias: {
     "wsdc": "",  //组件路径
-    "currentDir": "{__currentDir__}"
+    "currentDir": {__currentDir__}
   }, // resolve alias
   projectName: "{__projectName__}",
   userName: "{__userName__}",  //RTX用户名
