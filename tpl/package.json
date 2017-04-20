@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "reco -w -p 6001",
-    "dev": "reco dev -p 6001",
+    "watch": "reco -w --port 6001 --open",
+    "dev": "reco dev --p 6001 --open",
     "publish": "reco publish",
     "new": "reco new"
   },
