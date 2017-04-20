@@ -3,18 +3,18 @@ module.exports = {
   cssPath: "client/style",
   htmlPath: "client/html",
   alias: {
-    "{__component__}": "{__componentPath__}",
-    "{__feature__}": "{__featurePath__}"
+    "wsdc": "",  //组件路径
+    "currentDir": "{__currentDir__}"
   }, // resolve alias
   projectName: "{__projectName__}",
-  userName: "{__userName__}", // 用户名
+  userName: "{__userName__}",  //RTX用户名
   sprites: {
     spritesmith: {
       padding: 4
-    }, // 雪碧图间距
-    retina: true, // retina屏幕
-    ratio: 2 // 几倍图片资源
+    },  //雪碧图间距
+    retina: true,  //retina屏幕
+    ratio: 3  //图片分倍率
   },
-  postcss: {__postcss__}, // boolean or array
-  pageConfig: "config/pageConfig"
+  postcss: {__postcss__}, //true or false
+  pageConfig: "config/pageConfig.js"
 }
