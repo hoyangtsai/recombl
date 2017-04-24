@@ -13,8 +13,8 @@
     </head>
     <body>
         <div class="wrapper"></div>
-        <script src="{__jsLayer__}dist/react.js"></script>
-        <!--__script__<script src="{__jsLayer__}dist{__samePath__}/common.js"></script>__script__-->
-        <script src="{__jsLayer__}dist{__samePath__}/{__jsName__}.js"></script>
+        <script src="{__jsLayer__}_tmp/react.js"></script>
+        <!--__script__<script src="{__jsLayer__}_tmp{__samePath__}/common.js"></script>__script__-->
+        <script src="{__jsLayer__}_tmp{__samePath__}/{__jsName__}.js"></script>
     </body>
 </html>
