@@ -16,8 +16,7 @@ export default class Root extends React.Component {
     }
     render() {
         return (
-            <div>
-            </div>
+            <div>Hello!!</div>
         );
     }
 }
