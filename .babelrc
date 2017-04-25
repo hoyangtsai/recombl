@@ -4,8 +4,17 @@
     "react",
     "stage-0"
   ],
-  "plugins": ["react-hot-loader/babel"],
   "env": {
-    "development": {}
+    "development": {
+      "plugins": ["react-hot-loader/babel"]
+    },
+    "production": {
+      "cacheDirectory": true,
+      "compact": false,
+      "comments": false,
+      "plugins": [
+        "transform-runtime"
+      ]
+    }
   }
 }
