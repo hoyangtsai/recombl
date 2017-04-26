@@ -13,7 +13,6 @@ if (argv['watch'] || argv['w'] || argv['_'].includes('dev')) {
 } else if (argv['new'] || argv['_'].includes('new')) {
   require('../lib/new');
 } else if ( argv['publish'] || argv['p']  || argv['_'].includes('publish') ) {
-  process.env.NODE_ENV = 'production';
   require('../lib/publish');
 } else if ( argv['init'] || argv['_'].includes('init') ) {
   require('../lib/init');
