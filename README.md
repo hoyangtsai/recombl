@@ -121,3 +121,6 @@ reco publish
 OR
 reco -pub
 ```
+
+<a name="faq"></a>
+## FAQ
