@@ -246,27 +246,23 @@ gulp.task('clean_tempfile', ['cp_jade_to_html'], function() {
 
 
 gulp.task('compress', function(cb) {
-  return gulp.src('./publish/**')
+  return gulp.src(path.join(process.env.PWD, process.env.PUBLISH_DIR, '/**'))
     .pipe(zip('publish.zip'))
-    .pipe(gulp.dest('./publish'));
+    .pipe(gulp.dest(path.join(process.env.PWD, 'publish')));
 });
 
 gulp.task('upload_zip', ['compress'], function() {
-  return gulp.src('./publish/publish.zip')
+  return gulp.src(path.join(process.env.PWD, 'publish/publish.zip'))
     .pipe(upload({
-      url: "http://wapstatic.kf0309.3g.qq.com/deploy",
+      url: 'http://wapstatic.kf0309.3g.qq.com/deploy',
       data: {
-        to: "/data/wapstatic/"+config.userName+"/"+config.projectName
+        to: `/data/wapstatic/${baseConfig.userName}/${baseConfig.projectName}`
       },
       callback: function() {
-        del.sync(['./publish/publish.zip']);
+        // del.sync([path.join(process.env.PWD, 'publish/publish.zip')]);
       },
       timeout: 15000
     }));
-});
-
-gulp.task('del_zip', ['upload_zip'], function() {
-  del.sync(['./publish/publish.zip']);
 });
 
 //构建到publish

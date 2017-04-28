@@ -16,6 +16,8 @@ if (argv['w'] || argv['_'].includes('dev') || argv['watch']) {
   require('../lib/publish');
 } else if (argv['init'] || argv['_'].includes('init')) {
   require('../lib/init');
+} else if (argv['upload'] || argv['_'].includes('upload')) {
+  require('../lib/upload');
 } else if (argv.h || argv.help) {
   console.log([
     'usage: reco [option]',

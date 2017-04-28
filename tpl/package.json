@@ -9,10 +9,6 @@
     "publish": "reco publish",
     "new": "reco new"
   },
-  "devDependencies": {
-    "webpack": "^1.14.0",
-    "webpack-dev-server": "^1.16.3"
-  },
   "author": "",
   "license": "ISC"
 }
