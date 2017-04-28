@@ -23,10 +23,10 @@ if (argv['w'] || argv['_'].includes('dev') || argv['watch']) {
     'usage: reco [option]',
     '',
     'option:',
-    '  -w --watch [-p | --port] [-open]   Start webpack and webpack-dev-server. Default port is [6001].',
-    '  --new                              Generate new html, js and scss file templates based on the entry in pageConfig.js',
-    '  -pub --publish                     Generate static html, js, css files to the publish folder.',
-    '  -h --help                          Print instruction and exit.'
+    '  -w --watch [-p | --port] [--open]    Start webpack and webpack-dev-server. Default port is [6001].',
+    '  --new                                Generate new html, js and scss file templates based on the entry in pageConfig.js',
+    '  --pub publish [--compress | --min]   Generate static html, js, css files to the publish folder.',
+    '  -h --help                            Print instruction and exit.'
   ].join('\n'));
   process.exit();
 } else {

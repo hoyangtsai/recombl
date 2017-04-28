@@ -15,6 +15,7 @@ const path = require('path');
 const request = require('request');
 const querystring = require('querystring');
 const gcmq = require('gulp-group-css-media-queries');
+const argv = require('optimist').argv;
 
 const userConfig = require(path.join(process.env.PWD, 'userConfig'));
 const pageConfig = require(path.join(process.env.PWD, userConfig.pageConfig));
@@ -124,7 +125,7 @@ gulp.task('css_img', function (done) {
         reduceIdents: false,
         mergeIdents: false,
         zindex: false,
-        core: false,//是否压缩
+        core: argv.compress || argv.min ? true : false,//是否压缩
         autoprefixer: false
       }))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css', baseConfig.path)));
@@ -244,7 +245,6 @@ gulp.task('clean_tempfile', ['cp_jade_to_html'], function() {
   del.sync(delFileList);
 });
 
-
 gulp.task('compress', function(cb) {
   return gulp.src(path.join(process.env.PWD, process.env.PUBLISH_DIR, '/**'))
     .pipe(zip('publish.zip'))
@@ -259,7 +259,7 @@ gulp.task('upload_zip', ['compress'], function() {
         to: `/data/wapstatic/${baseConfig.userName}/${baseConfig.projectName}`
       },
       callback: function() {
-        // del.sync([path.join(process.env.PWD, 'publish/publish.zip')]);
+        del.sync(path.join(process.env.PWD, 'publish/publish.zip'), { force: true });
       },
       timeout: 15000
     }));

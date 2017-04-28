@@ -15,7 +15,7 @@ npm install -g recombl
 ## 初始化
 在当前目录下，生成一个完整的项目文件夹，包含配置文件。
 ```bash
-reco init
+reco --init
 ```
 ```
 .
@@ -76,11 +76,32 @@ module.exports = {
     },
     retina: true,
     ratio: 3
-  }
+  },
+  // external loaders for webpack
+  extLoaders: [
+    {
+      test: /\.(jpe?g|png|gif|ttf|eot|woff2?)(\?.*)?$/,
+      loader: require.resolve('myapp-file-loader'),
+      query: {
+        queryname: 1,
+        name: '[path][name].[ext]'
+      }
+    },
+    {
+      test: /\.(svg)$/i,
+      loader: require.resolve('svg-sprite-loader')
+    }
+  ]
 }
 ```
-* path - 用来填入页面相对应的 html 和 style 路径，如果多人开发一个项目文件夾。不需要可以留空。
-* entry - 填入 js 文件入口，通常一个 js 文件入口对应一个 html 文件，可以是 array 或 object。
+* path
+
+  > 用来填入页面相对应的 html 和 style 路径，如果多人开发一个项目文件夾。不需要可以留空。
+  
+* entry
+
+  > 填入 js 文件入口，通常一个 js 文件入口对应一个 html 文件，可以是 array 或 object。
+
 ```js
 // array
 entry: ['page1', 'page2', 'page3'];
@@ -90,7 +111,14 @@ entry: {
   'page2': ['page2/sub-page-1', 'page2/sub-page-2']
 }
 ```
-* commonsChunk - name 为生成公用的 js 和 css 文件名，minChunks 为多少页面引同一个文件才生成共用文件。
+* commonsChunk
+
+  > name - 生成公用的 js 和 css 文件名，填 `null` 默认文件名为 common。
+  > minChunks - 多少页面引同一个文件才生成共用文件。
+
+* extLoaders
+
+  > 支持外部引入其他 loader。
 
 <a name="development"></a>
 ## 开发模式
@@ -98,29 +126,29 @@ entry: {
 ```bash
 reco -w
 OR
-reco dev
+reco --dev
 ```
-#### API
--p
-    选填，本地运行端口，默认6001<br/>
--open
-    选填，编译完成后，自动开启浏览器进行预览<br/>
+#### Option
+`-p` 选填；本地运行端口，默认6001。<br/>
+`--open` 选填；编译完成后，自动开启浏览器进行预览。<br/>
 
 <a name="new"></a>
 ## 生成新模版
 读取 pageConfg.js 中的 entry 生成新模版，其中包含 js, html 和 scss 文件。
 ```bash
-reco new
+reco --new
 ```
 
 <a name="publish"></a>
 ## 生成静态文件
 将目前源文件打包成静态文件，生成至 publish 文件夹底下。
 ```bash
-reco publish
+reco --publish
 OR
-reco -pub
+reco --pub
 ```
+#### Option
+`--min | --compress` 选填；压缩 js 和 css 文件。<br/>
 
 <a name="faq"></a>
 ## FAQ
