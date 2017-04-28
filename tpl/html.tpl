@@ -8,13 +8,13 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
         <title>{__htmlTitle__}</title>
-        <!--__css__<link rel="stylesheet" type="text/css" href="{__cssLayer__}css{__samePath__}/common.css">
-        <link rel="stylesheet" type="text/css" href="{__cssLayer__}css{__samePath__}/{__cssName__}.css">__css__-->
+        <!--__css__<link rel="stylesheet" type="text/css" href="{__cssLayer__}css{__path__}/common.css">
+        <link rel="stylesheet" type="text/css" href="{__cssLayer__}css{__path__}/{__cssName__}.css">__css__-->
     </head>
     <body>
         <div class="wrapper"></div>
-        <script src="{__jsLayer__}_tmp/react.js"></script>
-        <!--__script__<script src="{__jsLayer__}_tmp{__samePath__}/common.js"></script>__script__-->
-        <script src="{__jsLayer__}_tmp{__samePath__}/{__jsName__}.js"></script>
+        <script src="{__jsLayer__}{__devDir__}/react.js"></script>
+        <!--__script__<script src="{__jsLayer__}{__devDir__}{__path__}/common.js"></script>__script__-->
+        <script src="{__jsLayer__}{__devDir__}{__path__}/{__jsName__}.js"></script>
     </body>
 </html>
