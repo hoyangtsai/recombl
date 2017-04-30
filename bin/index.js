@@ -7,29 +7,30 @@ process.env.MODULE_PATH = path.resolve(__dirname, '../node_modules');
 process.env.DEV_DIR = '_tmp';
 process.env.PUBLISH_DIR = 'publish';
 
-if (argv['w'] || argv['_'].includes('dev') || argv['watch']) {
+if (argv['_'].includes('init')) {
+  require('../lib/init');
+} else if (argv['w'] || argv['_'].includes('dev') || argv['_'].includes('watch')) {
   process.env.NODE_ENV = 'development';
   require('../lib/server');
-} else if (argv['new'] || argv['_'].includes('new')) {
+} else if (argv['_'].includes('new')) {
   require('../lib/new');
-} else if (argv['pub'] || argv['_'].includes('publish')) {
+} else if (argv.p || argv['_'].includes('publish')) {
   require('../lib/publish');
-} else if (argv['init'] || argv['_'].includes('init')) {
-  require('../lib/init');
-} else if (argv['upload'] || argv['_'].includes('upload')) {
+} else if (argv['_'].includes('upload')) {
   require('../lib/upload');
-} else if (argv.h || argv.help) {
+} else if (argv.h || argv.help || argv['_'].includes('help')) {
   console.log([
-    'usage: reco [option]',
+    'usage: reco [option] [args]',
     '',
     'option:',
-    '  -w --watch [-p | --port] [--open]    Start webpack and webpack-dev-server. Default port is [6001].',
-    '  --new                                Generate new html, js and scss file templates based on the entry in pageConfig.js',
-    '  --pub publish [--compress | --min]   Generate static html, js, css files to the publish folder.',
-    '  -h --help                            Print instruction and exit.'
+    '  init                                       Generate a new project folder with a basic config.',
+    '  watch -w dev [-p | --port] [-o | --open]   Start webpack-dev-server with inline mode and HDR. Default port is [6001].',
+    '  new                                        Generate new template of html, js and scss files based on the pageConfig.js entry.',
+    '  publish -p [--min | --compress]            Generate static html, js, css files to the publish folder.',
+    '  -h --help                                  Print instruction and exit.'
   ].join('\n'));
   process.exit();
 } else {
-  console.log(`Unknown options.`);
+  console.log(`Unknown option.`);
   process.exit();
 }

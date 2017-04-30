@@ -2,9 +2,20 @@
 
 <a name="prerequisite"></a>
 ## 前置要求
-安装 Node 环境，最低要求 node 6 LTS 版本。
+安装 Node 环境，最低要求 Node.js 6 LTS 版本。<br />
 [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
-
+### Mac 系统推荐使用 [Homewbrew](https://brew.sh/) 或 [NVM](https://github.com/creationix/nvm) 安装 Node.js
+1. Homebrew
+```bash
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew install node
+```
+2. NVM
+```bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.3/install.sh | bash
+nvm install node
+```
+更多 NVM 介绍: [安裝多版本 Node.js](http://hoyangtsai.github.io/blog/2016/07/26/install-multi-version-of-nodejs/)
 <a name="init"></a>
 ## 安装
 ```bash
@@ -15,7 +26,7 @@ npm install -g recombl
 ## 初始化
 在当前目录下，生成一个完整的项目文件夹，包含配置文件。
 ```bash
-reco --init
+reco init
 ```
 ```
 .
@@ -33,8 +44,9 @@ reco --init
 ├── package.json
 └── userConfig.js
 ```
-### Config 配置文件
-userConfig.js 用戶配置
+### 配置 
+
+1. 用戶配置 userConfig.js
 ```js
 module.exports = {
   jsPath: "client/container",
@@ -44,7 +56,7 @@ module.exports = {
     "wsdc": "",  //组件路径
     "currentDir": process.cwd()
   }, // resolve alias
-  projectName: "20170430-eventName",
+  projectName: "20170430-projectName",
   userName: "keithytsai",  //RTX用户名
   sprites: {
     spritesmith: {
@@ -60,8 +72,7 @@ module.exports = {
 * postcss 设置 `true`，使用 QQ浏览器 postcss 默认配置 (autoprefixer, postcss-flexbugs-fixes, postcss-gradientfixer)
 * pageConfig 不同用户可指定不同页面配置
 
-
-config/pageConfig.js 页面配置
+2. 页面配置 config/pageConfig.js
 ```js
 module.exports = {
   path: "",  //页面层级
@@ -96,11 +107,11 @@ module.exports = {
 ```
 * path
 
-  > 用来填入页面相对应的 html 和 style 路径，如果多人开发一个项目文件夾。不需要可以留空。
+  > 如果多人开发一个项目文件夾，填入 js 入口文件对应的 html 和 style 路径。不需要可以留空。
   
 * entry
 
-  > 填入 js 文件入口，通常一个 js 文件入口对应一个 html 文件，可以是 array 或 object。
+  > 页面 js 入口文件，通常一个 js 入口文件对应一个 html 文件，可以是数组或对象。
 
 ```js
 // array
@@ -111,6 +122,7 @@ entry: {
   'page2': ['page2/sub-page-1', 'page2/sub-page-2']
 }
 ```
+
 * commonsChunk
 
   > name - 生成公用的 js 和 css 文件名，填 `null` 默认文件名为 common。
@@ -122,32 +134,30 @@ entry: {
 
 <a name="development"></a>
 ## 开发模式
-使用 webpack 和 webpack-dev-server 对源代码进行实时编译。
+启动 webpack-dev-server 与 inline mode 和 Hot Module Replacement 对源码进行实时编译。
 ```bash
-reco -w
+reco -w | --watch
 OR
-reco --dev
+reco dev
 ```
-#### Option
-`-p` 选填；本地运行端口，默认6001。<br/>
-`--open` 选填；编译完成后，自动开启浏览器进行预览。<br/>
+### 引数 argument
+`-p | --port` 选填；本地运行端口，默认6001。
+`-o | --open` 选填；编译完成后，自动开启浏览器进行预览。<br/>
 
 <a name="new"></a>
 ## 生成新模版
-读取 pageConfg.js 中的 entry 生成新模版，其中包含 js, html 和 scss 文件。
+读取 pageConfg.js 中 entry 生成新模版，其中包含 js, html 和 scss 文件。
 ```bash
-reco --new
+reco new
 ```
 
 <a name="publish"></a>
 ## 生成静态文件
 将目前源文件打包成静态文件，生成至 publish 文件夹底下。
 ```bash
-reco --publish
-OR
-reco --pub
+reco publish
 ```
-#### Option
+### 引数 argument
 `--min | --compress` 选填；压缩 js 和 css 文件。<br/>
 
 <a name="faq"></a>
