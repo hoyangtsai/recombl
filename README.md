@@ -4,18 +4,23 @@
 ## 前置要求
 安装 Node 环境，最低要求 Node.js 6 LTS 版本。<br />
 [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
+
 ### Mac 系统推荐使用 [Homewbrew](https://brew.sh/) 或 [NVM](https://github.com/creationix/nvm) 安装 Node.js
+
 1. Homebrew
 ```bash
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew install node
 ```
+
 2. NVM
 ```bash
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.3/install.sh | bash
 nvm install node
 ```
-更多 NVM 介绍: [安裝多版本 Node.js](http://hoyangtsai.github.io/blog/2016/07/26/install-multi-version-of-nodejs/)
+
+更多 NVM 介绍: [安裝多版本 Node.js](http://hoyangtsai.github.io/blog/2016/07/26/install-multiple-version-of-nodejs/)
+
 <a name="init"></a>
 ## 安装
 ```bash
@@ -44,7 +49,7 @@ reco init
 ├── package.json
 └── userConfig.js
 ```
-### 配置 
+### 配置
 
 1. 用戶配置 userConfig.js
 ```js
@@ -108,7 +113,7 @@ module.exports = {
 * path
 
   > 如果多人开发一个项目文件夾，填入 js 入口文件对应的 html 和 style 路径。不需要可以留空。
-  
+
 * entry
 
   > 页面 js 入口文件，通常一个 js 入口文件对应一个 html 文件，可以是数组或对象。
