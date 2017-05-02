@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hoyangtsai/Recombl.git"
+    "url": "https://github.com/hoyangtsai/recombl.git"
   },
   "keywords": [
     "react",
@@ -48,7 +48,6 @@
     "inquirer": "^3.0.6",
     "node-sass": "^4.5.0",
     "open-browser-webpack-plugin": "^0.0.3",
-    "optimist": "^0.6.1",
     "postcss-flexbugs-fixes": "^2.1.0",
     "postcss-gradientfixer": "^0.0.6",
     "postcss-loader": "^1.2.2",
