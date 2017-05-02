@@ -51,7 +51,7 @@ reco init
 ```
 ### 配置
 
-1. 用戶配置 userConfig.js
+#### 用戶配置 userConfig.js
 ```js
 module.exports = {
   jsPath: "client/container",
@@ -77,7 +77,7 @@ module.exports = {
 * postcss 设置 `true`，使用 QQ浏览器 postcss 默认配置 (autoprefixer, postcss-flexbugs-fixes, postcss-gradientfixer)
 * pageConfig 不同用户可指定不同页面配置
 
-2. 页面配置 config/pageConfig.js
+#### 页面配置 config/pageConfig.js
 ```js
 module.exports = {
   path: "",  //页面层级
@@ -131,9 +131,9 @@ entry: {
 
 * commonsChunk
 
-  > name - 生成公用的 js 和 css 文件名，填 `null` 默认文件名为 common。
-  > minChunks - 多少页面引同一个文件才生成共用文件。
-  > excludeFile - 排除不抽出做公共組件的頁面。
+  > 1. name - 生成公用的 js 和 css 文件名，填 `null` 默认文件名为 common。
+  > 2. minChunks - 多少页面引同一个文件才生成共用文件。
+  > 3. excludeFile - 排除不抽出做公共組件的頁面。
 
 * extLoaders
 
