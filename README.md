@@ -19,12 +19,12 @@ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.3/install.sh | b
 nvm install node
 ```
 
-更多 NVM 介绍: [安裝多版本 Node.js](http://hoyangtsai.github.io/blog/2016/07/26/install-multiple-version-of-nodejs/)
+更多 NVM 介绍: [安裝多版本 Node.js](http://km.oa.com/group/1847/articles/show/272868)
 
 <a name="init"></a>
 ## 安装
 ```bash
-npm install -g recombl
+tnpm install -g @tencent/recombl
 ```
 
 <a name="init"></a>
