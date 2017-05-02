@@ -84,7 +84,8 @@ module.exports = {
   entry: ["index"], //页面文件列表 Array or Object
   commonsChunk: {
     name: null,  //公共js、样式文件名，默认common
-    minChunks: null  //至少几个文件出现才抽取公共
+    minChunks: null,  //至少几个文件出现才抽取公共
+    excludeFile: []
   },
   sprites: {  //覆写 userConfg.js 雪碧图配置
     spritesmith: {
@@ -132,6 +133,7 @@ entry: {
 
   > name - 生成公用的 js 和 css 文件名，填 `null` 默认文件名为 common。
   > minChunks - 多少页面引同一个文件才生成共用文件。
+  > excludeFile - 排除不抽出做公共組件的頁面。
 
 * extLoaders
 
