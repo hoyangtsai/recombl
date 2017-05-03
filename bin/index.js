@@ -6,6 +6,7 @@ const argv = require('minimist')(process.argv.slice(2));
 process.env.MODULE_PATH = path.resolve(__dirname, '../node_modules');
 process.env.DEV_DIR = '_tmp';
 process.env.PUBLISH_DIR = 'publish';
+process.env.PWD = process.cwd();
 
 if (argv['_'].includes('init')) {
   require('../lib/init');
@@ -18,6 +19,8 @@ if (argv['_'].includes('init')) {
   require('../lib/publish');
 } else if (argv['_'].includes('upload')) {
   require('../lib/upload');
+} else if (argv.v || argv.version) {
+  console.log(require('../package.json').version);
 } else if (argv.h || argv.help || argv['_'].includes('help')) {
   console.log([
     'usage: reco [option] [args]',
