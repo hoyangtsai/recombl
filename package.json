@@ -1,6 +1,6 @@
 {
   "name": "@tencent/recombl",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "React Component Builder",
   "main": "bin/index.js",
   "scripts": {
