@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "watch": "reco -w --port 6001 --open",
-    "dev": "reco dev --p 6001 --open",
-    "publish": "reco --pub",
-    "new": "reco --new"
+    "dev": "reco dev -p 6001 --open",
+    "publish": "reco publish",
+    "new": "reco new",
+    "upload": "reco upload",
+    "clean": "rm -rf _tmp/ publish/"
   },
   "devDependencies": {
     "myapp-file-loader": "^0.2.0",
