@@ -7,6 +7,7 @@ process.env.MODULE_PATH = path.resolve(__dirname, '../node_modules');
 process.env.DEV_DIR = '_tmp';
 process.env.PUBLISH_DIR = 'publish';
 process.env.PWD = process.cwd();
+process.env.ROOT = path.resolve(__dirname, '..');
 
 if (argv['_'].includes('init')) {
   require('../lib/init');
