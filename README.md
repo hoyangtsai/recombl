@@ -121,11 +121,11 @@ module.exports = {
 
 ```js
 // array
-entry: ['page1', 'page2', 'page3'];
+entry: ['./app/page1', './app/page2', './app/page2'];
 // object
 entry: {
-  'page1': ['page1/sub-page-1', 'page1/sub-page-2', 'page-sub-page-3'],
-  'page2': ['page2/sub-page-1', 'page2/sub-page-2']
+  'a': ['.app/page-a1', '.app/page-a2'],
+  'b': ['.app/page-b1', '.app/page-b2', '.app/page-b3']
 }
 ```
 
