@@ -105,7 +105,8 @@ gulp.task('css_img', function (done) {
             return match;
           }
           return 'url('+layerPath+'font/';
-      }))//更正字体路径
+      }))
+      //更正字体路径
       // .pipe(replace(/url\(.+\/_.*\/react-guide\//g, function(match) {
       //     componentResourcePath = match;
       //     return 'url('+layerPath+'asset/';

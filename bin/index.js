@@ -30,7 +30,8 @@ if (argv['_'].includes('init')) {
     '  watch -w dev [-p | --port] [-o | --open]   Start webpack-dev-server with inline mode and HDR. Default port is [6001].',
     '  new                                        Generate new template of html, js and scss files based on the pageConfig.js entry.',
     '  publish -p [--min | --compress]            Generate static html, js, css files to the publish folder.',
-    '  -h --help                                  Print instruction and exit.'
+    '  -h --help                                  Print instruction and exit.',
+    '  -v --version                               Show the installed version.'
   ].join('\n'));
   process.exit();
 } else {
