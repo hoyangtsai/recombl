@@ -140,8 +140,8 @@ gulp.task('cp_img', ['css_img'], function (done) {
 });
 
 gulp.task('cp_font', function (done) {
-  return gulp.src(path.join(process.env.PWD, 'client/image/font', baseConfig.path, '**'))
-      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'font', baseConfig.path)));
+  return gulp.src(path.join(process.env.PWD, 'client/**/font', baseConfig.path, '**'))
+      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, baseConfig.path)));
 });
 
 gulp.task('cp_component', ['css_img'], function (done) {
