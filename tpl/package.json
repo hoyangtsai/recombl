@@ -12,6 +12,7 @@
     "clean": "rm -rf _tmp/ publish/"
   },
   "devDependencies": {
+    "babel-plugin-import": "^1.2.1",
     "myapp-file-loader": "^0.2.0",
     "svg-sprite-loader": "^0.3.1"
   },
