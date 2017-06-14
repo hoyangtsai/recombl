@@ -11,6 +11,9 @@
     "upload": "reco upload",
     "clean": "rm -rf _tmp/ publish/"
   },
+  "dependencies": {
+    "react-router": "^3.0.0"
+  },
   "devDependencies": {
     "babel-plugin-import": "^1.2.1",
     "myapp-file-loader": "^0.2.0",
