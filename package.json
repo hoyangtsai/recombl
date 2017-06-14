@@ -1,5 +1,5 @@
 {
-  "name": "@tencent/recombl",
+  "name": "recombl",
   "version": "1.3.1",
   "description": "React Component Builder",
   "main": "bin/index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://git.code.oa.com/mxd/recombl.git"
+    "url": "https://github.com/hoyangtsai/recombl.git"
   },
   "keywords": [
     "react",
