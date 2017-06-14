@@ -99,7 +99,7 @@ gulp.task('css_img', function (done) {
           }
           return 'url('+layerPath+'image/';
       }))//更正图片路径
-      .pipe(replace(/url\([^_:\n\r]+\/font\//gi, function(match) {
+      .pipe(replace(/url\([^_:\)\n\r]+\/font\//gi, function(match) {
           var str = match.toLowerCase();
           if (str.indexOf('url(//') > -1) {
             return match;
