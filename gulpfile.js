@@ -45,7 +45,7 @@ let componentResourcePath;//组件资源在dist的目录
 gulp.task('css_img', function (done) {
   let opts = {
     stylesheetPath: path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css'),
-    spritePath: path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image', userConfig.path) + '/',
+    spritePath: path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image', baseConfig.path) + '/',
     spritesmith: baseConfig.sprites.spritesmith,
     retina:  baseConfig.sprites.retina,
     hooks: false,
