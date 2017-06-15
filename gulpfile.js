@@ -19,7 +19,7 @@ const argv = require('optimist').argv;
 
 const userConfig = require(path.join(process.env.PWD, 'userConfig'));
 const pageConfig = require(path.join(process.env.PWD, userConfig.pageConfig));
-const baseConfig = Object.assign(userConfig, pageConfig);
+const baseConfig = Object.assign({}, userConfig, pageConfig);
 
 function getLayerPath(str) {
   if (!str) {
