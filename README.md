@@ -168,7 +168,7 @@ reco publish
 `--min | --compress` 选填；压缩 js 和 css 文件。
 
 <a name="upload"></a>
-## 上传 publish.zip
+## 上传重构测试服务器
 将 publish.zip 用 http request 方式上传到指定服务器
 ```bash
 reco upload

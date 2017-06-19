@@ -264,7 +264,8 @@ gulp.task('upload_zip', ['compress'], function() {
       },
       callback: function() {
         del.sync(path.join(process.env.PWD, 'publish/publish.zip'), { force: true });
-
+        console.info(`Uploaded scuccessfully. Served at: `);
+        console.info(`http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`);
         if (argv.o | argv.open) {
           require('open')(
             `http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`);
