@@ -253,14 +253,22 @@ gulp.task('compress', function(cb) {
 });
 
 gulp.task('upload_zip', ['compress'], function() {
+  let host = argv.h || 'http://wapstatic.kf0309.3g.qq.com/deploy';
+  let userName = argv.u || baseConfig.userName;
+  let projName = argv.p || baseConfig.projectName;
   return gulp.src(path.join(process.env.PWD, 'publish/publish.zip'))
     .pipe(upload({
-      url: 'http://wapstatic.kf0309.3g.qq.com/deploy',
+      url: host,
       data: {
-        to: `/data/wapstatic/${baseConfig.userName}/${baseConfig.projectName}`
+        to: `/data/wapstatic/${userName}/${projName}`
       },
       callback: function() {
         del.sync(path.join(process.env.PWD, 'publish/publish.zip'), { force: true });
+
+        if (argv.o | argv.open) {
+          require('open')(
+            `http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`);
+        }
       },
       timeout: 15000
     }));

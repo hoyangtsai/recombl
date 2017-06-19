@@ -15,7 +15,7 @@ if (argv['_'].includes('init')) {
   require('../lib/server');
 } else if (argv['_'].includes('new')) {
   require('../lib/new');
-} else if (argv.p || argv['_'].includes('publish')) {
+} else if (argv['_'].includes('publish')) {
   process.env.NODE_ENV = 'production';
   require('../lib/publish');
 } else if (argv['_'].includes('upload')) {

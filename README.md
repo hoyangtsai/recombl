@@ -149,7 +149,7 @@ reco dev
 ```
 ### 引数 argument
 `-p | --port` 选填；本地运行端口，默认6001。
-`-o | --open` 选填；编译完成后，自动开启浏览器进行预览。<br/>
+`-o | --open` 选填；编译完成后，自动开启浏览器进行预览。
 
 <a name="new"></a>
 ## 生成新模版
@@ -165,7 +165,19 @@ reco new
 reco publish
 ```
 ### 引数 argument
-`--min | --compress` 选填；压缩 js 和 css 文件。<br/>
+`--min | --compress` 选填；压缩 js 和 css 文件。
+
+<a name="upload"></a>
+## 上传 publish.zip
+将 publish.zip 用 http request 方式上传到指定服务器
+```bash
+reco upload
+```
+### 引数 argument
+`-h` 选填；指定服务器位址。
+`-u` 选填；用户名称。
+`-p` 选填；项目名称。
+`-o | --open` 选填；上传完成后，自动开启浏览器进行预览。
 
 <a name="faq"></a>
 ## FAQ
