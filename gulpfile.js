@@ -16,6 +16,8 @@ const request = require('request');
 const querystring = require('querystring');
 const gcmq = require('gulp-group-css-media-queries');
 const argv = require('optimist').argv;
+const colors = require('colors');
+const gutil = require('gulp-util');
 
 const userConfig = require(path.join(process.env.PWD, 'userConfig'));
 const pageConfig = require(path.join(process.env.PWD, userConfig.pageConfig));
@@ -253,7 +255,7 @@ gulp.task('compress', function(cb) {
 });
 
 gulp.task('upload_zip', ['compress'], function() {
-  let host = argv.h || 'http://wapstatic.kf0309.3g.qq.com/deploy';
+  let host = argv.h || 'http://wapstatic.kf0309.3g.qq.com/uploaddd';
   let userName = argv.u || baseConfig.userName;
   let projName = argv.p || baseConfig.projectName;
   return gulp.src(path.join(process.env.PWD, 'publish/publish.zip'))
@@ -264,14 +266,17 @@ gulp.task('upload_zip', ['compress'], function() {
       },
       callback: function() {
         del.sync(path.join(process.env.PWD, 'publish/publish.zip'), { force: true });
-        console.info(`Uploaded scuccessfully. Served at: `);
-        console.info(`http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`);
-        if (argv.o | argv.open) {
-          require('open')(
-            `http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`);
-        }
       },
       timeout: 15000
+    }).on('error', function(err) {
+      console.error(err);
+    }).on('end', function() {
+      gutil.log(`Served at: `.green);
+      gutil.log(`http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`.green);
+      if (argv.o | argv.open) {
+        require('open')(
+          `http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`);
+      }
     }));
 });
 
