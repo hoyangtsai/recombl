@@ -268,10 +268,10 @@ gulp.task('upload_zip', ['compress'], function() {
         del.sync(path.join(process.env.PWD, 'publish/publish.zip'), { force: true });
       },
       timeout: 15000
-    }).on('error', function(e) {
-      console.log(e);
-    }).on('done', function(code) {
-      gutil.log(`Uploaded scuccessfully. Served at: `.green);
+    }).on('error', function(err) {
+      console.error(err);
+    }).on('end', function() {
+      gutil.log(`Served at: `.green);
       gutil.log(`http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`.green);
       if (argv.o | argv.open) {
         require('open')(
