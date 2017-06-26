@@ -9,7 +9,6 @@
       "plugins": ["react-hot-loader/babel"]
     },
     "production": {
-      "cacheDirectory": true,
       "compact": false,
       "comments": false,
       "plugins": [
