@@ -15,11 +15,13 @@ const path = require('path');
 const request = require('request');
 const querystring = require('querystring');
 const gcmq = require('gulp-group-css-media-queries');
-const argv = require('minimist')(process.argv.slice(2));
+const argv = require('optimist').argv;
+const colors = require('colors');
+const gutil = require('gulp-util');
 
 const userConfig = require(path.join(process.env.PWD, 'userConfig'));
 const pageConfig = require(path.join(process.env.PWD, userConfig.pageConfig));
-const baseConfig = Object.assign(userConfig, pageConfig);
+const baseConfig = Object.assign({}, userConfig, pageConfig);
 
 function getLayerPath(str) {
   if (!str) {
@@ -45,7 +47,7 @@ let componentResourcePath;//组件资源在dist的目录
 gulp.task('css_img', function (done) {
   let opts = {
     stylesheetPath: path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css'),
-    spritePath: path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image', userConfig.path) + '/',
+    spritePath: path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image', baseConfig.path) + '/',
     spritesmith: baseConfig.sprites.spritesmith,
     retina:  baseConfig.sprites.retina,
     hooks: false,
@@ -99,7 +101,7 @@ gulp.task('css_img', function (done) {
           }
           return 'url('+layerPath+'image/';
       }))//更正图片路径
-      .pipe(replace(/url\([^_:\n\r]+\/font\//gi, function(match) {
+      .pipe(replace(/url\([^_:\)\n\r]+\/font\//gi, function(match) {
           var str = match.toLowerCase();
           if (str.indexOf('url(//') > -1) {
             return match;
@@ -140,8 +142,8 @@ gulp.task('cp_img', ['css_img'], function (done) {
 });
 
 gulp.task('cp_font', function (done) {
-  return gulp.src(path.join(process.env.PWD, 'client/image/font', baseConfig.path, '**'))
-      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'font', baseConfig.path)));
+  return gulp.src(path.join(process.env.PWD, 'client/**/font', baseConfig.path, '**'))
+      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, baseConfig.path)));
 });
 
 gulp.task('cp_component', ['css_img'], function (done) {
@@ -253,16 +255,28 @@ gulp.task('compress', function(cb) {
 });
 
 gulp.task('upload_zip', ['compress'], function() {
+  let host = argv.h || 'http://wapstatic.kf0309.3g.qq.com/uploaddd';
+  let userName = argv.u || baseConfig.userName;
+  let projName = argv.p || baseConfig.projectName;
   return gulp.src(path.join(process.env.PWD, 'publish/publish.zip'))
     .pipe(upload({
-      url: 'http://wapstatic.kf0309.3g.qq.com/deploy',
+      url: host,
       data: {
-        to: `/data/wapstatic/${baseConfig.userName}/${baseConfig.projectName}`
+        to: `/data/wapstatic/${userName}/${projName}`
       },
       callback: function() {
         del.sync(path.join(process.env.PWD, 'publish/publish.zip'), { force: true });
       },
       timeout: 15000
+    }).on('error', function(err) {
+      console.error(err);
+    }).on('end', function() {
+      gutil.log(`Served at: `.green);
+      gutil.log(`http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`.green);
+      if (argv.o | argv.open) {
+        require('open')(
+          `http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`);
+      }
     }));
 });
 

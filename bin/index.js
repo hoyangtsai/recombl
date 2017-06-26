@@ -7,7 +7,6 @@ process.env.MODULE_PATH = path.resolve(__dirname, '../node_modules');
 process.env.DEV_DIR = '_tmp';
 process.env.PUBLISH_DIR = 'publish';
 process.env.PWD = process.cwd();
-process.env.ROOT = path.resolve(__dirname, '..');
 
 if (argv['_'].includes('init')) {
   require('../lib/init');
@@ -16,7 +15,8 @@ if (argv['_'].includes('init')) {
   require('../lib/server');
 } else if (argv['_'].includes('new')) {
   require('../lib/new');
-} else if (argv.p || argv['_'].includes('publish')) {
+} else if (argv['_'].includes('publish')) {
+  process.env.NODE_ENV = 'production';
   require('../lib/publish');
 } else if (argv['_'].includes('upload')) {
   require('../lib/upload');
@@ -31,7 +31,8 @@ if (argv['_'].includes('init')) {
     '  watch -w dev [-p | --port] [-o | --open]   Start webpack-dev-server with inline mode and HDR. Default port is [6001].',
     '  new                                        Generate new template of html, js and scss files based on the pageConfig.js entry.',
     '  publish -p [--min | --compress]            Generate static html, js, css files to the publish folder.',
-    '  -h --help                                  Print instruction and exit.'
+    '  -h --help                                  Print instruction and exit.',
+    '  -v --version                               Show the installed version.'
   ].join('\n'));
   process.exit();
 } else {
