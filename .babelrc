@@ -14,7 +14,7 @@
       "comments": false,
       "plugins": [
         "transform-runtime"
-      ],
+      ]
     }
   }
 }
