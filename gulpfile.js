@@ -255,13 +255,14 @@ gulp.task('compress', function(cb) {
 });
 
 gulp.task('upload_zip', ['compress'], function() {
-  let host = argv.h || 'http://wapstatic.kf0309.3g.qq.com/uploaddd';
+  let host = argv.h || 'http://wapstatic.kf0309.3g.qq.com/upload';
   let userName = argv.u || baseConfig.userName;
   let projName = argv.p || baseConfig.projectName;
   return gulp.src(path.join(process.env.PWD, 'publish/publish.zip'))
     .pipe(upload({
       url: host,
       data: {
+        type: 'zip',
         to: `/data/wapstatic/${userName}/${projName}`
       },
       callback: function() {
