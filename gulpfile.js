@@ -77,15 +77,6 @@ gulp.task('css_img', function (done) {
 
   let layerPath = getLayerPath(baseConfig.path);
 
-  if (!Array.isArray(baseConfig.entry)) {
-    let delFileList = [];
-    for (let key in baseConfig.entry) {
-      delFileList.push(path.join(process.env.PWD, process.env.DEV_DIR, `${baseConfig.path}`, `${key}.js`));
-      delFileList.push(path.join(process.env.PWD, baseConfig.jsPath, baseConfig.path, `${key}.js`));
-    }
-    del.sync(delFileList, { force: true });
-  }
-
   return gulp.src(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.css'))
       .pipe(postcss([sprites(opts)]))//合并雪碧图
       .pipe(base64({//图片base64
@@ -230,24 +221,6 @@ gulp.task('cp_jade_to_html', ['css_img'], function (done) {
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'html', baseConfig.path)));
 });
 
-gulp.task('clean_tempfile', ['cp_jade_to_html'], function() {
-  let delFileList = [];
-  if (!Array.isArray(baseConfig.entry)) {
-    for (let key in baseConfig.entry) {
-      for (let i in baseConfig.entry[key]) {
-        let fileName = baseConfig.entry[key][i];
-        delFileList.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, `${fileName}.jade`));
-      }
-    }
-  } else {
-    for (let i in baseConfig.entry) {
-      let fileName = baseConfig.entry[i];
-      delFileList.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, `${fileName}.jade`));
-    }
-  }
-  del.sync(delFileList);
-});
-
 gulp.task('compress', function(cb) {
   return gulp.src(path.join(process.env.PWD, process.env.PUBLISH_DIR, '/**'))
     .pipe(zip('publish.zip'))
@@ -281,8 +254,12 @@ gulp.task('upload_zip', ['compress'], function() {
     }));
 });
 
+gulp.task('clean_tmp', ['css_img', 'cp_js', 'cp_jade_to_html'], function() {
+  del.sync(path.join(process.env.PWD, process.env.DEV_DIR, '**'), { force: true });
+});
+
 //构建到publish
-gulp.task('publish', ['css_img', 'cp_img', 'cp_font', 'cp_js', 'cp_jade_to_html'], function (done) {
+gulp.task('publish', ['css_img', 'cp_img', 'cp_font', 'cp_js', 'cp_jade_to_html', 'clean_tmp'], function (done) {
   console.log("Finished publish...");
   console.log("Success!");
 });
