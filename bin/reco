@@ -24,9 +24,9 @@ if (argv['_'].includes('init')) {
   console.log(require('../package.json').version);
 } else if (argv.h || argv.help || argv['_'].includes('help')) {
   console.log([
-    'usage: reco [option] [args]',
+    'usage: reco <command> [args]',
     '',
-    'option:',
+    'command:',
     '  init                                       Generate a new project folder with a basic config.',
     '  watch -w dev [-p | --port] [-o | --open]   Start webpack-dev-server with inline mode and HDR. Default port is [6001].',
     '  new                                        Generate new template of html, js and scss files based on the pageConfig.js entry.',
