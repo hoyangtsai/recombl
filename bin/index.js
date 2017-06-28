@@ -39,3 +39,5 @@ if (argv['_'].includes('init')) {
   console.log(`Unknown option.`);
   process.exit();
 }
+
+// require('../lib/reco')();
