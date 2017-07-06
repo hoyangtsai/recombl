@@ -30,7 +30,7 @@ describe('version', function() {
     }).then(function() {
       var output = getConsoleLog(spy);
       var expected = [
-        'reco-cli: ' + cliVersion,
+        'reco version: ' + cliVersion,
         'os: ' + os.type() + ' ' + os.release() + ' ' + os.platform() + ' ' + os.arch()
       ];
 
