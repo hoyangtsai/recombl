@@ -54,7 +54,7 @@
     "inquirer": "^3.0.6",
     "node-sass": "^4.5.0",
     "null-loader": "^0.1.1",
-    "open": "0.0.5",
+    "opn": "^5.1.0",
     "postcss-flexbugs-fixes": "^2.1.0",
     "postcss-gradientfixer": "^0.0.6",
     "postcss-loader": "^1.2.2",
