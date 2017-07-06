@@ -28,7 +28,7 @@ module.exports = {
     //   loader: require.resolve('svg-sprite-loader')
     // }
   ],
-  // // babel plugin
+  // babel plugin
   // babelPlugin: [
   //   [
   //     'import',
