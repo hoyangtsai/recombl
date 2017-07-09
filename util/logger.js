@@ -83,7 +83,7 @@ function createLogger(options) {
   }
 
   let logger = bunyan.createLogger({
-    name: options.name || 'hexo',
+    name: options.name || 'reco',
     streams: streams,
     serializers: {
       err: bunyan.stdSerializers.err
