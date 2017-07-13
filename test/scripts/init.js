@@ -1,25 +1,23 @@
 'use strict';
 
-var should = require('chai').should(); // eslint-disable-line
-var pathFn = require('path');
-// var fs = require('hexo-fs');
-var Promise = require('bluebird');
-var HashStream = require('../../util/hash');
-var rewire = require('rewire');
-var Context = require('../../lib/context');
-var assetDir = pathFn.join(__dirname, '../../assets');
-var fs = require('fs');
-var utilFs = require('../../util/fs');
+const should = require('chai').should();
+const pathFn = require('path');
+const Promise = require('bluebird');
+const rewire = require('rewire');
+const Context = require('../../lib/context');
+const hxUtil = require('hexo-util');
+const hxFs = require('hexo-fs');
 
 describe('init', function() {
-  var baseDir = pathFn.join(__dirname, 'init_test');
-  var initModule = rewire('../../lib/console/init');
-  var reco = new Context(baseDir, { silent: true });
-  var init = initModule.bind(reco);
-  var assets = [];
+  let assetDir = pathFn.join(__dirname, '../../assets');
+  let baseDir = pathFn.join(__dirname, 'init_test');
+  let initModule = rewire('../../lib/console/init');
+  let reco = new Context(baseDir, { silent: true });
+  let init = initModule.bind(reco);
+  let assets = [];
 
   function rmdir(path) {
-    return Promise.promisify(fs.rmdirSync(path)).catch(function(err) {
+    return hxFs.rmdir(path).catch(function(err) {
       if (err.cause && err.cause.code === 'ENOENT') return;
       throw err;
     });
@@ -29,17 +27,17 @@ describe('init', function() {
     return new Promise(function(resolve, reject) {
       rs.pipe(ws)
         .on('error', reject)
-        .on('finish', resolve);
+        .on('end', resolve);
     });
   }
 
   function compareFile(a, b) {
-    var streamA = new HashStream();
-    var streamB = new HashStream();
+    let streamA = new hxUtil.HashStream();
+    let streamB = new hxUtil.HashStream();
 
     return Promise.all([
-      pipeStream(fs.createReadStream(a), streamA),
-      pipeStream(fs.createReadStream(b), streamB)
+      pipeStream(hxFs.createReadStream(a), streamA),
+      pipeStream(hxFs.createReadStream(b), streamB)
     ]).then(function() {
       return streamA.read().equals(streamB.read());
     });
@@ -49,43 +47,26 @@ describe('init', function() {
     return Promise.each(assets, function(item) {
       return compareFile(
         pathFn.join(assetDir, item),
-        pathFn.join(path, item)
+        pathFn.join(path, 'project' ,item)
       ).should.eventually.be.true;
     }).finally(function() {
       return rmdir(path);
     });
   }
 
-  function isFileExisted(file) {
-    return Promise.all([
-      fs.existsSync()
-    ]).then(() => {
-      return true;
-    });
-  }
-
-  function check(path) {
-    return Promise.try(() => {
-
-    }).finally(() => {
-
-    })
-  }
-
-  // before(function() {
-  //   return utilFs.listDir(assetDir).then(function(files) {
-  //     assets = files;
-  //   });
-  // });
-
-  // after(function() {
-  //   return rmdir(baseDir);
-  // });
-
-  it('project', function() {
-    return init({ _: ['project'], u: 'user', install: false }).then(() => {
-      return true;
+  before(function() {
+    return hxFs.listDir(assetDir).then(function(files) {
+      assets = files;
     });
   });
 
+  after(function() {
+    return rmdir(baseDir);
+  });
+
+  it('project', function() {
+    return init({ _: ['project'], u: 'user', install: false }).then(() => {
+      return check(baseDir);
+    });
+  });
 });

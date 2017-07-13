@@ -51,6 +51,8 @@
     "gulp-replace": "^0.5.4",
     "gulp-uglify": "^2.1.2",
     "gulp-zip": "^4.0.0",
+    "hexo-fs": "^0.2.1",
+    "hexo-util": "^0.6.0",
     "inquirer": "^3.0.6",
     "node-sass": "^4.5.0",
     "null-loader": "^0.1.1",

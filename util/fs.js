@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require('path');
 const fs = require('graceful-fs');
 const Promise = require('bluebird');
@@ -13,7 +15,7 @@ function mkdirsSync(dir) {
   fs.mkdirSync(dir);
 }
 
-function hasParentSync(dir) {
+function checkParentSync(dir) {
   if (!dir) throw new TypeError('dir is required!');
 
   let parent = path.dirname(dir);
@@ -30,7 +32,7 @@ function hasParentSync(dir) {
 function writeFileSync(dir, data, options) {
   if (!dir) throw new TypeError('dir is required!');
 
-  hasParentSync(dir);
+  checkParentSync(dir);
   fs.writeFileSync(dir, data, options);
 }
 
@@ -45,82 +47,28 @@ function copyFileSync(src, dest) {
   });
 }
 
-
-
-var readdirAsync = Promise.promisify(fs.readdir);
-
-function trueFn() {
-  return true;
-}
-
-function ignoreHiddenFiles(ignore) {
-  if (!ignore) return trueFn;
-
-  return function(item) {
-    return item[0] !== '.';
-  };
-}
-
-function ignoreFilesRegex(regex) {
-  if (!regex) return trueFn;
-
-  return function(item) {
-    return !regex.test(item);
-  };
-}
-
-function reduceFiles(result, item) {
-  if (Array.isArray(item)) {
-    return result.concat(item);
-  }
-
-  result.push(item);
-  return result;
-}
-
-function _readAndFilterDir(path, options) {
-  return readdirAsync(path)
-    .filter(ignoreHiddenFiles(options.ignoreHidden == null ? true : options.ignoreHidden))
-    .filter(ignoreFilesRegex(options.ignorePattern))
-    .map(function(item) {
-      var fullPath = join(path, item);
-
-      return statAsync(fullPath).then(function(stats) {
-        return {
-          isDirectory: stats.isDirectory(),
-          path: item,
-          fullPath: fullPath
-        };
-      });
-    });
-}
-
-function _listDir(path, options, parent) {
-  options = options || {};
-  parent = parent || '';
-
-  return _readAndFilterDir(path, options).map(function(item) {
-    if (item.isDirectory) {
-      return _listDir(item.fullPath, options, join(parent, item.path));
-    }
-
-    return join(parent, item.path);
-  }).reduce(reduceFiles, []);
-}
-
-function listDir(path, options, callback) {
+function rmdirSync(path) {
   if (!path) throw new TypeError('path is required!');
 
-  if (!callback && typeof options === 'function') {
-    callback = options;
-    options = {};
+  var files = fs.readdirSync(path);
+  var childPath;
+  var stats;
+
+  for (var i = 0, len = files.length; i < len; i++) {
+    childPath = join(path, files[i]);
+    stats = fs.statSync(childPath);
+
+    if (stats.isDirectory()) {
+      rmdirSync(childPath);
+    } else {
+      fs.unlinkSync(childPath);
+    }
   }
 
-  return _listDir(path, options).asCallback(callback);
+  fs.rmdirSync(path);
 }
-
-// listDir
-exports.listDir = listDir;
 
 exports.mkdirsSync = mkdirsSync;
 exports.copyFileSync = copyFileSync;
+
+exports.rmdirSync = rmdirSync;
