@@ -1,0 +1,24 @@
+{
+  "name": "proj-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "reco -w --port 6001 --open",
+    "dev": "reco dev -p 6001 --open",
+    "publish": "reco publish",
+    "new": "reco new",
+    "upload": "reco upload",
+    "clean": "rm -rf _tmp/ publish/"
+  },
+  "dependencies": {
+    "react-router": "^3.0.0"
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.2.1",
+    "myapp-file-loader": "^0.2.0",
+    "svg-sprite-loader": "^0.3.1"
+  },
+  "author": "user-1",
+  "license": "ISC"
+}

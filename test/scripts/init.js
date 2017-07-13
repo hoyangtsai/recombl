@@ -56,19 +56,35 @@ describe('init', function() {
     });
   }
 
-  before(function() {
-    return utilFs.listDir(assetDir).then(function(files) {
-      assets = files;
+  function isFileExisted(file) {
+    return Promise.all([
+      fs.existsSync()
+    ]).then(() => {
+      return true;
     });
-  });
+  }
 
-  after(function() {
-    return rmdir(baseDir);
-  });
+  function check(path) {
+    return Promise.try(() => {
 
-  it('current path', function() {
-    return init({_: ['test-1'], u: 'test-user', install: false}).then(function() {
-      return check(baseDir);
+    }).finally(() => {
+
+    })
+  }
+
+  // before(function() {
+  //   return utilFs.listDir(assetDir).then(function(files) {
+  //     assets = files;
+  //   });
+  // });
+
+  // after(function() {
+  //   return rmdir(baseDir);
+  // });
+
+  it('project', function() {
+    return init({ _: ['project'], u: 'user', install: false }).then(() => {
+      return true;
     });
   });
 
