@@ -6,8 +6,8 @@ module.exports = {
     "wsdc": "",  //组件路径
     "currentDir": process.cwd()
   }, // resolve alias
-  projectName: "project",
-  userName: "user",  //RTX用户名
+  projectName: "foobar",
+  userName: "ben",  //RTX用户名
   sprites: {
     spritesmith: {
       padding: 4

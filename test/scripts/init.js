@@ -15,6 +15,8 @@ describe('init', function() {
   let reco = new Context(baseDir, { silent: true });
   let init = initModule.bind(reco);
   let assets = [];
+  let projectName = 'foobar';
+  let userName = 'ben'
 
   function rmdir(path) {
     return hxFs.rmdir(path).catch(function(err) {
@@ -27,7 +29,7 @@ describe('init', function() {
     return new Promise(function(resolve, reject) {
       rs.pipe(ws)
         .on('error', reject)
-        .on('end', resolve);
+        .on('finish', resolve);
     });
   }
 
@@ -47,10 +49,8 @@ describe('init', function() {
     return Promise.each(assets, function(item) {
       return compareFile(
         pathFn.join(assetDir, item),
-        pathFn.join(path, 'project' ,item)
+        pathFn.join(path, projectName ,item)
       ).should.eventually.be.true;
-    }).finally(function() {
-      return rmdir(path);
     });
   }
 
@@ -64,9 +64,11 @@ describe('init', function() {
     return rmdir(baseDir);
   });
 
-  it('project', function() {
-    return init({ _: ['project'], u: 'user', install: false }).then(() => {
+  it('new project', function() {
+    return init({ _: [projectName], u: userName, install: false }).then(() => {
       return check(baseDir);
     });
   });
+
+  it('folder exists');
 });
