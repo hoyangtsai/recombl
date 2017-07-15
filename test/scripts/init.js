@@ -70,5 +70,7 @@ describe('init', function() {
     });
   });
 
-  it('folder exists');
+  it('folder exists', function() {
+    return init({ _: [projectName], install: false });
+  });
 });
