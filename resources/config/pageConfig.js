@@ -23,16 +23,5 @@ module.exports = {
     //   test: /\.(svg)$/i,
     //   loader: require.resolve('svg-sprite-loader')
     // }
-  ],
-  // babel plugin
-  // babelPlugin: [
-  //   [
-  //     'import',
-  //     {
-  //       libraryName: '@tencent/comby-lib-mobile',
-  //       libraryDirectory: 'components',
-  //       style: true
-  //     }
-  //   ]
-  // ]
+  ]
 }

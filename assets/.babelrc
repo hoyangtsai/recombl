@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "import",
+      {
+        "libraryName": "@tencent/comby-lib-pc",
+        "libraryDirectory": "components",
+        "style": true
+      }
+    ]
+  ]
+}
