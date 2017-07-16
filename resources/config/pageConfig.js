@@ -17,11 +17,7 @@ module.exports = {
   extLoaders: [
     {
       test: /\.(jpe?g|png|gif|ttf|eot|woff2?)(\?.*)?$/,
-      loader: require.resolve('myapp-file-loader'),
-      query: {
-        queryname: 1,
-        name: '[path][name].[ext]'
-      }
+      loader: require.resolve('myapp-file-loader') + '?name=[path][name].[ext]'
     },
     // {
     //   test: /\.(svg)$/i,
