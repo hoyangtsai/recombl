@@ -68,7 +68,17 @@ function rmdirSync(path) {
   fs.rmdirSync(path);
 }
 
+function readJson(file) {
+  if (file in readJson.cache) return readJson.cache[file];
+  let ret;
+  try { ret = JSON.parse(fs.readFileSync(file)); }
+  catch (e) { }  return readJson.cache[file] = ret;
+}
+readJson.cache = {};
+
 exports.mkdirsSync = mkdirsSync;
 exports.copyFileSync = copyFileSync;
 
 exports.rmdirSync = rmdirSync;
+
+exports.readJson = readJson;
