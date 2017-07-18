@@ -15,7 +15,7 @@ const path = require('path');
 const request = require('request');
 const querystring = require('querystring');
 const gcmq = require('gulp-group-css-media-queries');
-const argv = require('optimist').argv;
+const argv = require('minimist')(process.argv.slice(2));
 const gutil = require('gulp-util');
 const chalk = require('chalk');
 
