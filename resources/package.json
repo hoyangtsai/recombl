@@ -12,6 +12,7 @@
     "clean": "rm -rf _tmp/ publish/"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "react-router": "^3.0.0"
   },
   "devDependencies": {
