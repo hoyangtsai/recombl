@@ -158,40 +158,12 @@ gulp.task('cp_js', ['css_img'], function (done) {
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'js', baseConfig.path)));
 });
 
-gulp.task('cp_html', ['css_img'], function (done) {
-  let filePath = Array.isArray(baseConfig.entry) ?
-      path.join(process.env.PWD, baseConfig.htmlPath, baseConfig.path, '*.html') :
-      path.join(process.env.PWD, baseConfig.htmlPath, baseConfig.path, '**/*.html')
-
-  return gulp.src(filePath)
-      .pipe(replace(/_tmp\/.+\.js\.css/g, function(match) {
-          var newStr = match.replace(".js.css", ".css");
-          return newStr;
-      }))
-      .pipe(replace(/\.\.\/_tmp\/.+\.js/g, function(match) {
-          var newStr = match.replace("../_tmp/", "js/");
-          return newStr;
-      }))
-      .pipe(replace(/<!--__css__/g, function(match) {
-          return "";
-      }))
-      .pipe(replace(/__css__-->/g, function(match) {
-          return "";
-      }))
-      .pipe(replace(/<!--__script__/g, function(match) {
-          return "";
-      }))
-      .pipe(replace(/__script__-->/g, function(match) {
-          return "";
-      }))
-      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'html', baseConfig.path)));
-});
-
 gulp.task('cp_jade_to_html', ['css_img'], function (done) {
-  let filePath = Array.isArray(baseConfig.entry) ?
-    path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.jade') :
-    path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.jade')
+  // let filePath = Array.isArray(baseConfig.entry) ?
+  //   path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.jade') :
+  //   path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.jade')
 
+  let filePath = path.join(process.env.PWD, process.env.DEV_DIR, 'ssr', '**/*.jade')
   return gulp.src(filePath)
       .pipe(replace(/_tmp\/.+\.js\.css/g, function(match) {
         return match.replace(".js.css", ".css");
