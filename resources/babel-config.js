@@ -1,4 +1,5 @@
 module.exports = (env, options = {}) => ({
+  cacheDirectory: true,
   babelrc: false,
   presets: [
     require.resolve('babel-preset-es2015'),

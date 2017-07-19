@@ -15,7 +15,7 @@ const path = require('path');
 const request = require('request');
 const querystring = require('querystring');
 const gcmq = require('gulp-group-css-media-queries');
-const args = require('minimist')(process.argv.slice(5));
+const args = require('minimist')(String(process.argv.slice(5)).split(','));
 const gutil = require('gulp-util');
 const chalk = require('chalk');
 
@@ -147,22 +147,17 @@ gulp.task('cp_component', ['css_img'], function (done) {
 });
 
 gulp.task('cp_js', ['css_img'], function (done) {
-  let filePath = ['!' + path.join(process.env.PWD, process.env.DEV_DIR, 'react.js'),
-    path.join(__dirname, 'lib/react/react.js')];
-  if (!Array.isArray(baseConfig.entry)) {
-    filePath.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.js'));
-  } else {
-    filePath.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.js'));
-  }
+  let filePath = [
+    '!' + path.join(process.env.PWD, process.env.DEV_DIR, 'react.js'),
+    path.join(__dirname, 'lib/react/react.js'),
+    '!' + path.join(process.env.PWD, process.env.DEV_DIR, 'ssr', baseConfig.path, '**/*.js'),
+    path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.js')
+  ];
   return gulp.src(filePath)
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'js', baseConfig.path)));
 });
 
 gulp.task('cp_jade_to_html', ['css_img'], function (done) {
-  // let filePath = Array.isArray(baseConfig.entry) ?
-  //   path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.jade') :
-  //   path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.jade')
-
   let filePath = path.join(process.env.PWD, process.env.DEV_DIR, 'ssr', '**/*.jade')
   return gulp.src(filePath)
       .pipe(replace(/_tmp\/.+\.js\.css/g, function(match) {
