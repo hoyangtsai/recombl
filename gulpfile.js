@@ -15,7 +15,7 @@ const path = require('path');
 const request = require('request');
 const querystring = require('querystring');
 const gcmq = require('gulp-group-css-media-queries');
-const argv = require('minimist')(process.argv.slice(2));
+const args = require('minimist')(process.argv.slice(5));
 const gutil = require('gulp-util');
 const chalk = require('chalk');
 
@@ -119,7 +119,7 @@ gulp.task('css_img', function (done) {
         reduceIdents: false,
         mergeIdents: false,
         zindex: false,
-        core: argv.compress || argv.min ? true : false,//是否压缩
+        core: args.m || args.minimize ? true : false,//是否压缩
         autoprefixer: false
       }))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css', baseConfig.path)));
@@ -200,9 +200,9 @@ gulp.task('compress', function(cb) {
 });
 
 gulp.task('upload_zip', ['compress'], function() {
-  let host = argv.h || 'http://wapstatic.kf0309.3g.qq.com/upload';
-  let userName = argv.u || baseConfig.userName;
-  let projName = argv.p || baseConfig.projectName;
+  let host = args.h || 'http://wapstatic.kf0309.3g.qq.com/upload';
+  let userName = args.u || baseConfig.userName;
+  let projName = args.p || baseConfig.projectName;
   return gulp.src(path.join(
       process.env.PWD, process.env.PUBLISH_DIR, process.env.PUBLISH_DIR + '.zip'))
     .pipe(upload({
