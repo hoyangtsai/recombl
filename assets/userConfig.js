@@ -4,10 +4,10 @@ module.exports = {
   htmlPath: "client/html",
   alias: {
     "wsdc": "",  //组件路径
-    "currentDir": {__currentDir__}
+    "currentDir": process.cwd()
   }, // resolve alias
-  projectName: "{__projectName__}",
-  userName: "{__userName__}",  //RTX用户名
+  projectName: "foobar",
+  userName: "ben",  //RTX用户名
   sprites: {
     spritesmith: {
       padding: 4
@@ -15,6 +15,6 @@ module.exports = {
     retina: true,  //retina屏幕
     ratio: 3  //图片分倍率
   },
-  postcss: {__postcss__}, //true or false
+  postcss: false, //true or false
   pageConfig: "config/pageConfig.js"
 }

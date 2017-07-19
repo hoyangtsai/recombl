@@ -15,9 +15,9 @@ const path = require('path');
 const request = require('request');
 const querystring = require('querystring');
 const gcmq = require('gulp-group-css-media-queries');
-const argv = require('minimist')(process.argv.slice(2));
-const colors = require('colors');
+const args = require('minimist')(String(process.argv.slice(5)).split(','));
 const gutil = require('gulp-util');
+const chalk = require('chalk');
 
 const userConfig = require(path.join(process.env.PWD, 'userConfig'));
 const pageConfig = require(path.join(process.env.PWD, userConfig.pageConfig));
@@ -77,15 +77,6 @@ gulp.task('css_img', function (done) {
 
   let layerPath = getLayerPath(baseConfig.path);
 
-  if (!Array.isArray(baseConfig.entry)) {
-    let delFileList = [];
-    for (let key in baseConfig.entry) {
-      delFileList.push(path.join(process.env.PWD, process.env.DEV_DIR, `${baseConfig.path}`, `${key}.js`));
-      delFileList.push(path.join(process.env.PWD, baseConfig.jsPath, baseConfig.path, `${key}.js`));
-    }
-    del.sync(delFileList, { force: true });
-  }
-
   return gulp.src(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.css'))
       .pipe(postcss([sprites(opts)]))//合并雪碧图
       .pipe(base64({//图片base64
@@ -128,7 +119,7 @@ gulp.task('css_img', function (done) {
         reduceIdents: false,
         mergeIdents: false,
         zindex: false,
-        core: argv.compress || argv.min ? true : false,//是否压缩
+        core: args.m || args.minimize ? true : false,//是否压缩
         autoprefixer: false
       }))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css', baseConfig.path)));
@@ -156,51 +147,18 @@ gulp.task('cp_component', ['css_img'], function (done) {
 });
 
 gulp.task('cp_js', ['css_img'], function (done) {
-  let filePath = ['!' + path.join(process.env.PWD, process.env.DEV_DIR, 'react.js'),
-    path.join(__dirname, 'lib/react/react.js')];
-  if (!Array.isArray(baseConfig.entry)) {
-    filePath.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.js'));
-  } else {
-    filePath.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.js'));
-  }
+  let filePath = [
+    '!' + path.join(process.env.PWD, process.env.DEV_DIR, 'react.js'),
+    path.join(__dirname, 'lib/react/react.js'),
+    '!' + path.join(process.env.PWD, process.env.DEV_DIR, 'ssr', baseConfig.path, '**/*.js'),
+    path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.js')
+  ];
   return gulp.src(filePath)
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'js', baseConfig.path)));
 });
 
-gulp.task('cp_html', ['css_img'], function (done) {
-  let filePath = Array.isArray(baseConfig.entry) ?
-      path.join(process.env.PWD, baseConfig.htmlPath, baseConfig.path, '*.html') :
-      path.join(process.env.PWD, baseConfig.htmlPath, baseConfig.path, '**/*.html')
-
-  return gulp.src(filePath)
-      .pipe(replace(/_tmp\/.+\.js\.css/g, function(match) {
-          var newStr = match.replace(".js.css", ".css");
-          return newStr;
-      }))
-      .pipe(replace(/\.\.\/_tmp\/.+\.js/g, function(match) {
-          var newStr = match.replace("../_tmp/", "js/");
-          return newStr;
-      }))
-      .pipe(replace(/<!--__css__/g, function(match) {
-          return "";
-      }))
-      .pipe(replace(/__css__-->/g, function(match) {
-          return "";
-      }))
-      .pipe(replace(/<!--__script__/g, function(match) {
-          return "";
-      }))
-      .pipe(replace(/__script__-->/g, function(match) {
-          return "";
-      }))
-      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'html', baseConfig.path)));
-});
-
 gulp.task('cp_jade_to_html', ['css_img'], function (done) {
-  let filePath = Array.isArray(baseConfig.entry) ?
-    path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.jade') :
-    path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.jade')
-
+  let filePath = path.join(process.env.PWD, process.env.DEV_DIR, 'ssr', '**/*.jade')
   return gulp.src(filePath)
       .pipe(replace(/_tmp\/.+\.js\.css/g, function(match) {
         return match.replace(".js.css", ".css");
@@ -230,182 +188,46 @@ gulp.task('cp_jade_to_html', ['css_img'], function (done) {
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'html', baseConfig.path)));
 });
 
-gulp.task('clean_tempfile', ['cp_jade_to_html'], function() {
-  let delFileList = [];
-  if (!Array.isArray(baseConfig.entry)) {
-    for (let key in baseConfig.entry) {
-      for (let i in baseConfig.entry[key]) {
-        let fileName = baseConfig.entry[key][i];
-        delFileList.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, `${fileName}.jade`));
-      }
-    }
-  } else {
-    for (let i in baseConfig.entry) {
-      let fileName = baseConfig.entry[i];
-      delFileList.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, `${fileName}.jade`));
-    }
-  }
-  del.sync(delFileList);
-});
-
 gulp.task('compress', function(cb) {
   return gulp.src(path.join(process.env.PWD, process.env.PUBLISH_DIR, '/**'))
-    .pipe(zip('publish.zip'))
+    .pipe(zip(process.env.PUBLISH_DIR + '.zip'))
     .pipe(gulp.dest(path.join(process.env.PWD, 'publish')));
 });
 
 gulp.task('upload_zip', ['compress'], function() {
-  let host = argv.h || 'http://wapstatic.kf0309.3g.qq.com/uploaddd';
-  let userName = argv.u || baseConfig.userName;
-  let projName = argv.p || baseConfig.projectName;
-  return gulp.src(path.join(process.env.PWD, 'publish/publish.zip'))
+  let host = args.h || 'http://wapstatic.kf0309.3g.qq.com/upload';
+  let userName = args.u || baseConfig.userName;
+  let projName = args.p || baseConfig.projectName;
+  return gulp.src(path.join(
+      process.env.PWD, process.env.PUBLISH_DIR, process.env.PUBLISH_DIR + '.zip'))
     .pipe(upload({
       url: host,
       data: {
+        type: 'zip',
         to: `/data/wapstatic/${userName}/${projName}`
       },
       callback: function() {
-        del.sync(path.join(process.env.PWD, 'publish/publish.zip'), { force: true });
+        del.sync(path.join(
+          process.env.PWD, process.env.PUBLISH_DIR, process.env.PUBLISH_DIR + '.zip'),
+          { force: true }
+        );
       },
       timeout: 15000
     }).on('error', function(err) {
-      console.error(err);
+      console.error(chalk.red(err));
     }).on('end', function() {
-      gutil.log(`Served at: `.green);
-      gutil.log(`http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`.green);
-      if (argv.o | argv.open) {
-        require('open')(
-          `http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/html/index.html`);
-      }
+      gutil.log(chalk.yellow(`Served at: `));
+      gutil.log(chalk.yellow(
+        `http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/`));
     }));
+});
+
+gulp.task('clean_tmp', ['css_img', 'cp_js', 'cp_jade_to_html'], function() {
+  del.sync(path.join(process.env.PWD, process.env.DEV_DIR, '**'), { force: true });
 });
 
 //构建到publish
 gulp.task('publish', ['css_img', 'cp_img', 'cp_font', 'cp_js', 'cp_jade_to_html'], function (done) {
   console.log("Finished publish...");
   console.log("Success!");
-});
-
-//获取所有文件
-function getAllFiles(path, fileList){
-  fileList = fileList || [];
-  let dirList = fs.readdirSync(path);
-  dirList.forEach(function(item){
-    if (fs.statSync(path + '/' + item).isDirectory()) {
-      getAllFiles(path + '/' + item, fileList);
-    } else {
-      fileList.push(path + '/' + item);
-    }
-  });
-  return fileList;
-}
-
-//上传CDN
-function uploadCDN(file, callback) {
-  let cdnUrl = 'http://inner.up.cdn.qq.com:8080/uploadserver/uploadfile.jsp';
-  let params = {
-      appname: config.cdn.appname,
-      user: config.cdn.userName || config.userName,
-  },
-  dirname = path.dirname(file),
-  extname = path.extname(file),
-  basename = path.basename(file, extname),
-  filePath = dirname.replace('./publish', config.cdn.rootPath);
-  extname = extname.replace('.', '');
-  if (extname!='woff' && extname!='woff2' && extname!='eot' && extname!='ttf' && extname!='svg' && extname!='png' && extname!='gif' && extname!='jpg' && extname!='js' && extname!='css') {
-    console.info("didn't upload %s", file);
-    cndFileObj.fileKey++;
-    return;
-  }
-
-  params = Object.assign(params, {
-    filepath: filePath,
-    filename: basename,
-    filetype: extname,
-    filesize: fs.statSync(file).size
-  });
-  request.post({
-    headers: {
-      'X-CDN-Authentication': config.cdn.token
-    },
-    url: cdnUrl + '?' + querystring.stringify(params),
-    body: fs.createReadStream(file)
-  }, function (err, xhr, body) {
-    if (err || xhr.statusCode !== 200) {
-      console.error(err || xhr.statusCode);
-      console.error('存在上传失败文件，不会执行css引用资源路径替换');
-      return;
-    }
-    let data = JSON.parse(body);
-    if (data.ret_code !== 200) {
-      console.error(`CDN upload ${file} failed: ${data.err_msg}`);
-      console.error('存在上传失败文件，不会执行css引用资源路径替换');
-      return;
-    }
-    console.info('CDN upload %s to %s success.', file, data.cdn_url);
-    cndFileObj.fileKey++;
-    if (cndFileObj.fileKey == cndFileObj.fileNumber) {
-      let arrUrl = data.cdn_url.split(config.cdn.rootPath)
-      callback && callback(arrUrl[0]+config.cdn.rootPath+'/');
-    }
-  });
-}
-
-//替换css中本地资源文件路径为CDN路径
-function cdnUrl(url) {
-  gulp.src('./publish/css'+config.samePath+'/**/*.css')
-      .pipe(replace(/url\([^_:\n\r\)]+\)/gi, function(match) {
-          var str = match.toLowerCase();
-          if (str.indexOf('url(//') > -1) {
-              return match;
-          }
-          var filePath = match.replace(/url\((\.\.\/)+/, 'url('+url);
-          return filePath;
-      }))
-      .pipe(gulp.dest('./publish/css'+config.samePath));
-  console.info('css中资源文件已经替换为CDN资源');
-}
-
-//需上传CDN的文件的信息
-let cndFileObj = {
-  fileNumber: 0, //一共多少个文件
-  fileKey: 0 //正在上传第几个文件
-};
-cndFileObj.cndFileList = new Set();
-
-//项目中需上传CND的文件 按文件夹
-gulp.task('folder_cdn', function() {
-  let files = getAllFiles('./publish/image'+config.samePath);
-  files = files.concat(getAllFiles('./publish/font'+config.samePath));
-  files = files.concat(getAllFiles('./publish/asset'+config.samePath));
-  files.map(x => cndFileObj.cndFileList.add(x));
-  cndFileObj.fileNumber = cndFileObj.cndFileList.size;
-  cndFileObj.fileKey = 0;
-  for (file of cndFileObj.cndFileList) {
-      uploadCDN(file, cdnUrl);
-  }
-});
-
-//获取到css中的资源文件
-gulp.task('get_cnd_file', function() {
-  return gulp.src('./publish/css'+config.samePath+'/*.css')
-    .pipe(replace(/url\([^_:\n\r\)]+\)/gi, function(match) {
-      let str = match.toLowerCase();
-      if (str.indexOf('url(//') > -1) {
-          return match;
-      }
-      let filePath = match.replace(/url\((\.\.\/)+/, './publish/').replace(')', '');
-      cndFileObj.cndFileList.add(filePath);
-      return match;
-    })
-  );
-});
-
-//上传css中的资源文件
-gulp.task('use_cdn', ['get_cnd_file'], function() {
-  cndFileObj.fileNumber = cndFileObj.cndFileList.size;
-  cndFileObj.fileKey = 0;
-  for (file of cndFileObj.cndFileList) {
-    uploadCDN(file, cdnUrl);
-  }
 });
