@@ -24,7 +24,7 @@ nvm install node
 <a name="init"></a>
 ## 安装
 ```bash
-tnpm install -g @tencent/recombl
+npm install -g recombl
 ```
 
 <a name="init"></a>

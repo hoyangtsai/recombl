@@ -1,6 +1,6 @@
 {
   "name": "recombl",
-  "version": "1.4.3",
+  "version": "2.0.1-alpha.1",
   "description": "React Component Builder",
   "main": "bin/index.js",
   "scripts": {
