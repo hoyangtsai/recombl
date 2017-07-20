@@ -15,6 +15,12 @@ module.exports = {
     retina: true,  //retina屏幕
     ratio: 3  //图片分倍率
   },
+  browsersList: [
+    'last 4 versions',
+    'Android >= 4.0',
+    'Chrome >= 37',
+    'iOS>=7'
+  ],
   postcss: false, //true or false
   pageConfig: "config/pageConfig.js"
 }

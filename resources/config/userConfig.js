@@ -7,7 +7,7 @@ module.exports = {
     "currentDir": {__currentDir__}
   }, // resolve alias
   projectName: "{__projectName__}",
-  userName: "{__userName__}",  //RTX用户名
+  userName: "{__userName__}",
   sprites: {
     spritesmith: {
       padding: 4
@@ -15,7 +15,7 @@ module.exports = {
     retina: true,  //retina屏幕
     ratio: 3  //图片分倍率
   },
-  browserslist: [
+  browsersList: [
     'last 4 versions',
     'Android >= 4.0',
     'Chrome >= 37',

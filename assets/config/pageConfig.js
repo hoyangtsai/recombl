@@ -4,7 +4,7 @@ module.exports = {
   commonsChunk: {
     name: null,  //公共js、样式文件名，默认common
     minChunks: null,  //至少几个文件出现才抽取公共
-    excludeFile: []
+    exclude: []
   },
   sprites: {  //覆写 userConfg.js 雪碧图配置
     spritesmith: {
