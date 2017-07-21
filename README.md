@@ -52,7 +52,7 @@ reco init [project_name]
 ```js
 module.exports = {
   jsPath: "client/container",
-  cssPath: "client/style",
+  stylePath: "client/style",
   htmlPath: "client/html",
   alias: {
     "wsdc": "",  //组件路径

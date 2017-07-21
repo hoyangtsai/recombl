@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 /*__sub__*/
 
 /*页面定制样式*/
-import 'currentDir/client/style{__path__}/{__scssName__}.scss';
+import 'currentDir/{__stylePath__}{__path__}/{__scssName__}.scss';
 
 export default class Root extends React.Component {
   constructor(props) {
