@@ -7,7 +7,7 @@ module.exports = {
     "currentDir": process.cwd()
   }, // resolve alias
   projectName: "foobar",
-  userName: "ben",  //RTX用户名
+  userName: "ben",
   sprites: {
     spritesmith: {
       padding: 4
@@ -22,5 +22,6 @@ module.exports = {
     'iOS>=7'
   ],
   postcss: false, //true or false
-  pageConfig: "config/pageConfig.js"
+  pageConfig: "config/pageConfig.js",
+  devDirectory: "_tmp"
 }

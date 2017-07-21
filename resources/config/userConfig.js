@@ -22,5 +22,6 @@ module.exports = {
     'iOS>=7'
   ],
   postcss: {__postcss__}, //true or false
-  pageConfig: "config/pageConfig.js"
+  pageConfig: "config/pageConfig.js",
+  devDirectory: "_tmp"
 }
