@@ -23,6 +23,8 @@ const userConfig = require(path.join(process.env.PWD, 'userConfig'));
 const pageConfig = require(path.join(process.env.PWD, userConfig.pageConfig));
 const baseConfig = Object.assign({}, userConfig, pageConfig);
 
+const devDir = baseConfig.devDirectory || '_tmp';
+
 function getLayerPath(str) {
   if (!str) {
     str = "/";//解决QQ浏览器项目samePath为空的情况
@@ -77,7 +79,7 @@ gulp.task('css_img', function (done) {
 
   let layerPath = getLayerPath(baseConfig.path);
 
-  return gulp.src(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.css'))
+  return gulp.src(path.join(process.env.PWD, devDir, baseConfig.path, '*.css'))
       .pipe(postcss([sprites(opts)]))//合并雪碧图
       .pipe(base64({//图片base64
         extensions: [/\.__inline\.png$/i, /\.__inline\.svg$/i, /\.__inline\.jpe?g$/i, /\.__inline\.ttf$/i],
@@ -138,9 +140,9 @@ gulp.task('cp_font', function (done) {
 });
 
 gulp.task('cp_component', ['css_img'], function (done) {
-  let cpPath = path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '/_/react-guide/**');
+  let cpPath = path.join(process.env.PWD, devDir, baseConfig.path, '/_/react-guide/**');
   if (!!componentResourcePath) {
-    cpPath = path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, componentResourcePath.substring(5) + '**');
+    cpPath = path.join(process.env.PWD, devDir, baseConfig.path, componentResourcePath.substring(5) + '**');
   }
   return gulp.src(cpPath)
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'asset')));
@@ -148,17 +150,17 @@ gulp.task('cp_component', ['css_img'], function (done) {
 
 gulp.task('cp_js', ['css_img'], function (done) {
   let filePath = [
-    '!' + path.join(process.env.PWD, process.env.DEV_DIR, 'react.js'),
+    '!' + path.join(process.env.PWD, devDir, 'react.js'),
     path.join(__dirname, 'lib/react/react.js'),
-    '!' + path.join(process.env.PWD, process.env.DEV_DIR, 'ssr', baseConfig.path, '**/*.js'),
-    path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.js')
+    '!' + path.join(process.env.PWD, devDir, 'ssr', baseConfig.path, '**/*.js'),
+    path.join(process.env.PWD, devDir, baseConfig.path, '**/*.js')
   ];
   return gulp.src(filePath)
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'js', baseConfig.path)));
 });
 
 gulp.task('cp_jade_to_html', ['css_img'], function (done) {
-  let filePath = path.join(process.env.PWD, process.env.DEV_DIR, 'ssr', '**/*.jade')
+  let filePath = path.join(process.env.PWD, devDir, 'ssr', '**/*.jade')
   return gulp.src(filePath)
       .pipe(replace(/_tmp\/.+\.js\.css/g, function(match) {
         return match.replace(".js.css", ".css");
@@ -223,7 +225,7 @@ gulp.task('upload_zip', ['compress'], function() {
 });
 
 gulp.task('clean_tmp', ['css_img', 'cp_js', 'cp_jade_to_html'], function() {
-  del.sync(path.join(process.env.PWD, process.env.DEV_DIR, '**'), { force: true });
+  del.sync(path.join(process.env.PWD, devDir, '**'), { force: true });
 });
 
 //构建到publish
