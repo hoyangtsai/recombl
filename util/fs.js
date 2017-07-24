@@ -1,24 +1,22 @@
-'use strict';
-
-const path = require('path');
+const pathFn = require('path');
 const fs = require('graceful-fs');
 const Promise = require('bluebird');
 
-function mkdirsSync(dir) {
-  if (!dir) throw new TypeError('dir is required!');
+function mkdirsSync(path) {
+  if (!path) throw new TypeError('path is required!');
 
-  let parent = path.dirname(dir);
+  let parent = pathFn.dirname(path);
 
   if (!fs.existsSync(parent)) {
     mkdirsSync(parent);
   }
-  fs.mkdirSync(dir);
+  fs.mkdirSync(path);
 }
 
-function checkParentSync(dir) {
-  if (!dir) throw new TypeError('dir is required!');
+function checkParentSync(path) {
+  if (!path) throw new TypeError('path is required!');
 
-  let parent = path.dirname(dir);
+  let parent = pathFn.dirname(path);
 
   if (fs.existsSync(parent)) return;
 
@@ -29,11 +27,11 @@ function checkParentSync(dir) {
   }
 }
 
-function writeFileSync(dir, data, options) {
-  if (!dir) throw new TypeError('dir is required!');
+function writeFileSync(path, data, options) {
+  if (!path) throw new TypeError('path is required!');
 
-  checkParentSync(dir);
-  fs.writeFileSync(dir, data, options);
+  checkParentSync(path);
+  fs.writeFileSync(path, data, options);
 }
 
 function copyFileSync(src, dest) {
@@ -50,12 +48,12 @@ function copyFileSync(src, dest) {
 function rmdirSync(path) {
   if (!path) throw new TypeError('path is required!');
 
-  var files = fs.readdirSync(path);
-  var childPath;
-  var stats;
+  let files = fs.readdirSync(path);
+  let childPath;
+  let stats;
 
-  for (var i = 0, len = files.length; i < len; i++) {
-    childPath = join(path, files[i]);
+  for (let i = 0, len = files.length; i < len; i++) {
+    childPath = pathFn.join(path, files[i]);
     stats = fs.statSync(childPath);
 
     if (stats.isDirectory()) {
