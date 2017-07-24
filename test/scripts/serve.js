@@ -3,37 +3,35 @@ const Context = require('../../lib/context');
 const pathFn = require('path');
 const fs = require('hexo-fs');
 const Promise = require('bluebird');
-const rewire = require('rewire');
 
 describe('serve', function() {
   let baseDir = pathFn.join(__dirname, 'serve_test');
-
   let reco = new Context(baseDir, {silent: true});
-  let initModule = rewire('../../lib/console/init');
-  let init = initModule.bind(reco);
+  let init = require('../../lib/console/init').bind(reco);
+  let serve;
 
-  let server = require('../../lib/console/serve').bind(reco2);
-
-  // before(function() {
-  //   return Promise.all([
-  //   ]).then(function() {
-  //     return init({ _: ['foobar'], u: 'ben' });
-  //   });
-  // });
+  before(function() {
+    return init({ _: ['foobar'], u: 'ben', install: false }).then(() => {
+      reco.baseDir = pathFn.join(baseDir, 'foobar');
+      serve = require('../../lib/console/serve').bind(reco);
+    })
+  });
 
   it('static asset', function() {
 
   });
 
   it('invalid port', function() {
-    return server({port: -100}).catch(function(err) {
-      err.should.have.property('message', 'Port number -100 is invalid. Try a number between 1 and 65535.');
+    return serve({port: -100}).catch(function(err) {
+      err.should.have.property('message',
+        'Port number -100 is invalid. Try a port number between 1 and 65535.');
     });
   });
 
   it('invalid port > 65535', function() {
-    return server({port: 65536}).catch(function(err) {
-      err.should.have.property('message', 'Port number 65536 is invalid. Try a number between 1 and 65535.');
+    return serve({port: 65536}).catch(function(err) {
+      err.should.have.property('message',
+        'Port number 65536 is invalid. Try a port number between 1 and 65535.');
     });
   });
 });
