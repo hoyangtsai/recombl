@@ -79,7 +79,6 @@
     "chai": "^4.0.2",
     "chai-as-promised": "^7.0.0",
     "mocha": "^3.4.2",
-    "myapp-file-loader": "^0.2.2",
     "rewire": "^2.5.2",
     "sinon": "^2.3.6"
   }

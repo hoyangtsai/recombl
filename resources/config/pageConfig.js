@@ -15,10 +15,10 @@ module.exports = {
   },
   // external loaders for webpack
   extLoaders: [
-    {
-      test: /\.(jpe?g|png|gif|ttf|eot|woff2?)(\?.*)?$/,
-      loader: require.resolve('myapp-file-loader') + '?name=[path][name].[ext]'
-    },
+    // {
+    //   test: /\.(jpe?g|png|gif|ttf|eot|woff2?)(\?.*)?$/,
+    //   loader: require.resolve('myapp-file-loader') + '?name=[path][name].[ext]'
+    // },
     // {
     //   test: /\.(svg)$/i,
     //   loader: require.resolve('svg-sprite-loader')
