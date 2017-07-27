@@ -2,10 +2,6 @@ module.exports = {
   jsPath: "client/container",
   stylePath: "client/style",
   htmlPath: "client/html",
-  alias: {
-    "wsdc": "",  //组件路径
-    "currentDir": process.cwd()
-  }, // resolve alias
   projectName: "foobar",
   userName: "ben",
   sprites: {
@@ -14,6 +10,18 @@ module.exports = {
     },  //雪碧图间距
     retina: true,  //retina屏幕
     ratio: 3  //图片分倍率
+  },
+  webpack: {
+    externals: {
+      'react': 'React',
+      'react-dom': 'ReactDOM'
+    },
+    resolve: {
+      alias: {
+        "component": "",  //组件路径
+        "currentDir": process.cwd()
+      }
+    }
   },
   browsersList: [
     'last 4 versions',
