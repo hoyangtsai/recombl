@@ -7,9 +7,9 @@ module.exports = {
   sprites: {
     spritesmith: {
       padding: 4
-    },  //雪碧图间距
-    retina: true,  //retina屏幕
-    ratio: 3  //图片分倍率
+    }, //雪碧图间距
+    retina: true, //retina屏幕
+    ratio: 3 //图片分倍率
   },
   webpack: {
     externals: {
@@ -18,7 +18,7 @@ module.exports = {
     },
     resolve: {
       alias: {
-        "component": "",  //组件路径
+        "components": "", //组件路径
         "currentDir": {__currentDir__}
       }
     }

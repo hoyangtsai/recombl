@@ -54,10 +54,6 @@ module.exports = {
   jsPath: "client/container",
   stylePath: "client/style",
   htmlPath: "client/html",
-  alias: {
-    "wsdc": "",  //组件路径
-    "currentDir": process.cwd()
-  }, // resolve alias
   projectName: "my-project-1",
   userName: "hoyangtsai",
   sprites: {
@@ -66,6 +62,18 @@ module.exports = {
     },  //雪碧图间距
     retina: true,  //retina屏幕
     ratio: 3  //图片分倍率
+  },
+  webpack: {
+    externals: {
+      'react': 'React',
+      'react-dom': 'ReactDOM'
+    },
+    resolve: {
+      alias: {
+        "component": "",  //组件路径
+        "currentDir": process.cwd()
+      }
+    }
   },
   browsersList: [
     'last 4 versions',
@@ -102,11 +110,7 @@ module.exports = {
     {
       test: /\.(jpe?g|png|gif|ttf|eot|woff2?)(\?.*)?$/,
       loader: require.resolve('myapp-file-loader') + '?name=[path][name].[ext]'
-    },
-    // {
-    //   test: /\.(svg)$/i,
-    //   loader: require.resolve('svg-sprite-loader')
-    // }
+    }
   ]
 }
 ```
@@ -144,7 +148,8 @@ entry: {
 reco serve
 ```
 ### 引数 argument
-`-p, --port` 选填；本地运行端口，默认6001。
+`-i, --ip` 选填；本地运行ip，默认localhost。
+`-p, --port` 选填；本地运行端口，默认8003。
 `-o, --open` 选填；编译完成后，自动开启浏览器进行预览。
 
 ## 生成新模版
