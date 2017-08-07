@@ -130,6 +130,8 @@ gulp.task('css_img', function (done) {
 gulp.task('cp_img', ['css_img'], function (done) {
   gulp.src(path.join(process.env.PWD, 'client/image', baseConfig.path, '**'))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image', baseConfig.path)));
+  gulp.src(path.join(process.env.PWD, '_tmp/client/container', baseConfig.path, '**'))
+      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css/client/container', baseConfig.path)));  //处理项目级组件的资源文件
   return gulp.src([path.join(process.env.PWD, 'client/image/common/**')])
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image/common')));
 });
@@ -265,6 +267,11 @@ gulp.task('clean_tmp', ['css_img', 'cp_js', 'cp_jade_to_html'], function() {
 
 //构建到publish
 gulp.task('publish', ['css_img', 'cp_img', 'cp_library', 'cp_font', 'cp_js', 'cp_jade_to_html'], function (done) {
+  del.sync(path.join(process.env.PWD, process.env.DEV_DIR, '**'), { force: true });
+  const fullDevDir = path.join(process.env.PWD, process.env.DEV_DIR)
+  fs.mkdirSync(fullDevDir);
+  fs.createReadStream(path.resolve(__dirname, 'lib/react/react_dev.js'))
+    .pipe(fs.createWriteStream(path.join(fullDevDir, 'react.js')));
   console.log("Finished publish...");
   console.log("Success!");
 });

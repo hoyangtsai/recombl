@@ -16,17 +16,13 @@ module.exports = {
   // external loaders for webpack
   extLoaders: [
     {
-      test: /\.(jpe?g|png|gif|ttf|eot|woff2?)(\?.*)?$/,
+      test: /\.(jpe?g|png|gif|svg|ttf|eot|woff2?)(\?.*)?$/,
       loader: require.resolve('myapp-file-loader'),
       query: {
         queryname: 1,
         name: '[path][name].[ext]'
       }
     },
-    // {
-    //   test: /\.(svg)$/i,
-    //   loader: require.resolve('svg-sprite-loader')
-    // }
   ],
   // babel plugin
   // babelPlugin: [
