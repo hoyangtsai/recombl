@@ -1,7 +1,7 @@
 const gulp = require('gulp');
 const uglify = require('gulp-uglify');
 const postcss = require('gulp-postcss');
-const sprites = require('postcss-sprites').default;
+const sprites = require('postcss-sprites');
 const replace = require('gulp-replace');
 const rename = require('gulp-rename');
 const prettify = require('gulp-jsbeautifier');
@@ -42,7 +42,10 @@ function getLayerPath(str) {
   return layerPath;
 }
 
-let componentResourcePath;//组件资源在dist的目录
+let libraryResourcePath;  //组件资源在dist的目录
+const libraryName = path.basename(baseConfig.alias.wsdc); //组件库名称
+const libraryAssetReg = new RegExp('url\\(.+\\/_.*\\/'+libraryName+'\\/', 'g');
+
 //雪碧图 图片base64
 gulp.task('css_img', function (done) {
   let opts = {
@@ -91,19 +94,18 @@ gulp.task('css_img', function (done) {
             return match;
           }
           return 'url('+layerPath+'image/';
-      }))//更正图片路径
+      })) //更正图片路径
       .pipe(replace(/url\([^_:\)\n\r]+\/font\//gi, function(match) {
           var str = match.toLowerCase();
           if (str.indexOf('url(//') > -1) {
             return match;
           }
           return 'url('+layerPath+'font/';
-      }))
-      //更正字体路径
-      // .pipe(replace(/url\(.+\/_.*\/react-guide\//g, function(match) {
-      //     componentResourcePath = match;
-      //     return 'url('+layerPath+'asset/';
-      // })) //更正组件资源路径
+      })) //更正字体路径
+      .pipe(replace(libraryAssetReg, function(match) {
+          libraryResourcePath = match;
+          return 'url('+layerPath+'asset/';
+      })) //更正组件资源路径
       .pipe(rename(function (path) {//把.js.css的css重命名
         path.dirname = "";
         if (path.basename.indexOf(".js") > -1) {
@@ -137,10 +139,12 @@ gulp.task('cp_font', function (done) {
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, baseConfig.path)));
 });
 
-gulp.task('cp_component', ['css_img'], function (done) {
-  let cpPath = path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '/_/react-guide/**');
-  if (!!componentResourcePath) {
-    cpPath = path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, componentResourcePath.substring(5) + '**');
+gulp.task('cp_library', ['css_img'], function (done) {
+  gulp.src(path.join(process.env.PWD, '_tmp', baseConfig.path, 'node_modules', '**'))
+      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, baseConfig.path, 'html/node_modules')));
+  let cpPath = path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '/_/'+libraryName+'/**');
+  if (!!libraryResourcePath) {
+    cpPath = path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, libraryResourcePath.substring(5) + '**');
   }
   return gulp.src(cpPath)
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'asset')));
@@ -260,7 +264,7 @@ gulp.task('clean_tmp', ['css_img', 'cp_js', 'cp_jade_to_html'], function() {
 });
 
 //构建到publish
-gulp.task('publish', ['css_img', 'cp_img', 'cp_font', 'cp_js', 'cp_jade_to_html'], function (done) {
+gulp.task('publish', ['css_img', 'cp_img', 'cp_library', 'cp_font', 'cp_js', 'cp_jade_to_html'], function (done) {
   console.log("Finished publish...");
   console.log("Success!");
 });
