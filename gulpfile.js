@@ -15,13 +15,15 @@ const path = require('path');
 const request = require('request');
 const querystring = require('querystring');
 const gcmq = require('gulp-group-css-media-queries');
-const argv = require('optimist').argv;
+const args = require('minimist')(String(process.argv.slice(5)).split(','));
 const gutil = require('gulp-util');
 const chalk = require('chalk');
 
 const userConfig = require(path.join(process.env.PWD, 'userConfig'));
 const pageConfig = require(path.join(process.env.PWD, userConfig.pageConfig));
 const baseConfig = Object.assign({}, userConfig, pageConfig);
+
+const devDir = baseConfig.devDirectory || '_tmp';
 
 function getLayerPath(str) {
   if (!str) {
@@ -80,7 +82,7 @@ gulp.task('css_img', function (done) {
 
   let layerPath = getLayerPath(baseConfig.path);
 
-  return gulp.src(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.css'))
+  return gulp.src(path.join(process.env.PWD, devDir, baseConfig.path, '*.css'))
       .pipe(postcss([sprites(opts)]))//合并雪碧图
       .pipe(base64({//图片base64
         extensions: [/\.__inline\.png$/i, /\.__inline\.svg$/i, /\.__inline\.jpe?g$/i, /\.__inline\.ttf$/i],
@@ -121,7 +123,7 @@ gulp.task('css_img', function (done) {
         reduceIdents: false,
         mergeIdents: false,
         zindex: false,
-        core: argv.compress || argv.min ? true : false,//是否压缩
+        core: args.m || args.minimize ? true : false,//是否压缩
         autoprefixer: false
       }))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css', baseConfig.path)));
@@ -130,7 +132,7 @@ gulp.task('css_img', function (done) {
 gulp.task('cp_img', ['css_img'], function (done) {
   gulp.src(path.join(process.env.PWD, 'client/image', baseConfig.path, '**'))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image', baseConfig.path)));
-  gulp.src(path.join(process.env.PWD, '_tmp/client/container', baseConfig.path, '**'))
+  gulp.src(path.join(process.env.PWD, devDir, 'client/container', baseConfig.path, '**'))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css/client/container', baseConfig.path)));  //处理项目级组件的资源文件
   return gulp.src([path.join(process.env.PWD, 'client/image/common/**')])
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image/common')));
@@ -142,62 +144,29 @@ gulp.task('cp_font', function (done) {
 });
 
 gulp.task('cp_library', ['css_img'], function (done) {
-  gulp.src(path.join(process.env.PWD, '_tmp', baseConfig.path, 'node_modules', '**'))
+  gulp.src(path.join(process.env.PWD, devDir, baseConfig.path, 'node_modules', '**'))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, baseConfig.path, 'html/node_modules')));
-  let cpPath = path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '/_/'+libraryName+'/**');
+  let cpPath = path.join(process.env.PWD, devDir, baseConfig.path, '/_/'+libraryName+'/**');
   if (!!libraryResourcePath) {
-    cpPath = path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, libraryResourcePath.substring(5) + '**');
+    cpPath = path.join(process.env.PWD, devDir, baseConfig.path, libraryResourcePath.substring(5) + '**');
   }
   return gulp.src(cpPath)
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'asset')));
 });
 
 gulp.task('cp_js', ['css_img'], function (done) {
-  let filePath = ['!' + path.join(process.env.PWD, process.env.DEV_DIR, 'react.js'),
-    path.join(__dirname, 'lib/react/react.js')];
-  if (!Array.isArray(baseConfig.entry)) {
-    filePath.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.js'));
-  } else {
-    filePath.push(path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.js'));
-  }
+  let filePath = [
+    '!' + path.join(process.env.PWD, devDir, 'react.js'),
+    path.join(__dirname, 'lib/react/react.js'),
+    '!' + path.join(process.env.PWD, devDir, 'ssr', baseConfig.path, '**/*.js'),
+    path.join(process.env.PWD, devDir, baseConfig.path, '**/*.js')
+  ];
   return gulp.src(filePath)
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'js', baseConfig.path)));
 });
 
-gulp.task('cp_html', ['css_img'], function (done) {
-  let filePath = Array.isArray(baseConfig.entry) ?
-      path.join(process.env.PWD, baseConfig.htmlPath, baseConfig.path, '*.html') :
-      path.join(process.env.PWD, baseConfig.htmlPath, baseConfig.path, '**/*.html')
-
-  return gulp.src(filePath)
-      .pipe(replace(/_tmp\/.+\.js\.css/g, function(match) {
-          var newStr = match.replace(".js.css", ".css");
-          return newStr;
-      }))
-      .pipe(replace(/\.\.\/_tmp\/.+\.js/g, function(match) {
-          var newStr = match.replace("../_tmp/", "js/");
-          return newStr;
-      }))
-      .pipe(replace(/<!--__css__/g, function(match) {
-          return "";
-      }))
-      .pipe(replace(/__css__-->/g, function(match) {
-          return "";
-      }))
-      .pipe(replace(/<!--__script__/g, function(match) {
-          return "";
-      }))
-      .pipe(replace(/__script__-->/g, function(match) {
-          return "";
-      }))
-      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'html', baseConfig.path)));
-});
-
 gulp.task('cp_jade_to_html', ['css_img'], function (done) {
-  let filePath = Array.isArray(baseConfig.entry) ?
-    path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '*.jade') :
-    path.join(process.env.PWD, process.env.DEV_DIR, baseConfig.path, '**/*.jade')
-
+  let filePath = path.join(process.env.PWD, devDir, 'ssr', '**/*.jade')
   return gulp.src(filePath)
       .pipe(replace(/_tmp\/.+\.js\.css/g, function(match) {
         return match.replace(".js.css", ".css");
@@ -234,9 +203,9 @@ gulp.task('compress', function(cb) {
 });
 
 gulp.task('upload_zip', ['compress'], function() {
-  let host = argv.h || 'http://wapstatic.kf0309.3g.qq.com/upload';
-  let userName = argv.u || baseConfig.userName;
-  let projName = argv.p || baseConfig.projectName;
+  let host = args.h || 'http://wapstatic.kf0309.3g.qq.com/upload';
+  let userName = args.u || baseConfig.userName;
+  let projName = args.p || baseConfig.projectName;
   return gulp.src(path.join(
       process.env.PWD, process.env.PUBLISH_DIR, process.env.PUBLISH_DIR + '.zip'))
     .pipe(upload({
@@ -262,13 +231,13 @@ gulp.task('upload_zip', ['compress'], function() {
 });
 
 gulp.task('clean_tmp', ['css_img', 'cp_js', 'cp_jade_to_html'], function() {
-  del.sync(path.join(process.env.PWD, process.env.DEV_DIR, '**'), { force: true });
+  del.sync(path.join(process.env.PWD, devDir, '**'), { force: true });
 });
 
 //构建到publish
 gulp.task('publish', ['css_img', 'cp_img', 'cp_library', 'cp_font', 'cp_js', 'cp_jade_to_html'], function (done) {
-  del.sync(path.join(process.env.PWD, process.env.DEV_DIR, '**'), { force: true });
-  const fullDevDir = path.join(process.env.PWD, process.env.DEV_DIR)
+  del.sync(path.join(process.env.PWD, devDir, '**'), { force: true });
+  const fullDevDir = path.join(process.env.PWD, devDir)
   fs.mkdirSync(fullDevDir);
   fs.createReadStream(path.resolve(__dirname, 'lib/react/react_dev.js'))
     .pipe(fs.createWriteStream(path.join(fullDevDir, 'react.js')));
