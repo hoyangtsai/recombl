@@ -3,8 +3,8 @@ const pathFn = require('path');
 const Promise = require('bluebird');
 const rewire = require('rewire');
 const Context = require('../../lib/context');
-const hxUtil = require('hexo-util');
 const hxFs = require('hexo-fs');
+const HashStream = require('../../util/hash').HashStream;
 
 describe('init', function() {
   let assetDir = pathFn.join(__dirname, '../../assets');
@@ -32,8 +32,8 @@ describe('init', function() {
   }
 
   function compareFile(a, b) {
-    let streamA = new hxUtil.HashStream();
-    let streamB = new hxUtil.HashStream();
+    let streamA = new HashStream();
+    let streamB = new HashStream();
 
     return Promise.all([
       pipeStream(hxFs.createReadStream(a), streamA),
