@@ -45,8 +45,6 @@ function getLayerPath(str) {
 }
 
 let libraryResourcePath;  //组件资源在dist的目录
-const libraryName = path.basename(baseConfig.alias.wsdc); //组件库名称
-const libraryAssetReg = new RegExp('url\\(.+\\/_.*\\/'+libraryName+'\\/', 'g');
 
 //雪碧图 图片base64
 gulp.task('css_img', function (done) {
@@ -104,10 +102,10 @@ gulp.task('css_img', function (done) {
           }
           return 'url('+layerPath+'font/';
       })) //更正字体路径
-      .pipe(replace(libraryAssetReg, function(match) {
+      .pipe(replace(/url\(.+\/_\//, function(match) {
           libraryResourcePath = match;
           return 'url('+layerPath+'asset/';
-      })) //更正组件资源路径
+      })) //更正外部组件库资源路径
       .pipe(rename(function (path) {//把.js.css的css重命名
         path.dirname = "";
         if (path.basename.indexOf(".js") > -1) {
@@ -146,7 +144,7 @@ gulp.task('cp_font', function (done) {
 gulp.task('cp_library', ['css_img'], function (done) {
   gulp.src(path.join(process.env.PWD, devDir, baseConfig.path, 'node_modules', '**'))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, baseConfig.path, 'html/node_modules')));
-  let cpPath = path.join(process.env.PWD, devDir, baseConfig.path, '/_/'+libraryName+'/**');
+  let cpPath = path.join(process.env.PWD, devDir, baseConfig.path, '/_/**');
   if (!!libraryResourcePath) {
     cpPath = path.join(process.env.PWD, devDir, baseConfig.path, libraryResourcePath.substring(5) + '**');
   }
