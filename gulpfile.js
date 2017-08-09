@@ -195,35 +195,37 @@ gulp.task('cp_jade_to_html', ['css_img'], function (done) {
 });
 
 gulp.task('compress', function(cb) {
-  return gulp.src(path.join(process.env.PWD, process.env.PUBLISH_DIR, '/**'))
-    .pipe(zip(process.env.PUBLISH_DIR + '.zip'))
-    .pipe(gulp.dest(path.join(process.env.PWD, 'publish')));
+  let dir = args.d || args.dir || process.env.PUBLISH_DIR;
+  let source = path.join(process.env.PWD, dir, '/**');
+
+  return gulp.src(source)
+    .pipe(zip(dir + '.zip'))
+    .pipe(gulp.dest(path.join(process.env.PWD)));
 });
 
-gulp.task('upload_zip', ['compress'], function() {
-  let host = args.h || 'http://wapstatic.kf0309.3g.qq.com/upload';
-  let userName = args.u || baseConfig.userName;
-  let projName = args.p || baseConfig.projectName;
-  return gulp.src(path.join(
-      process.env.PWD, process.env.PUBLISH_DIR, process.env.PUBLISH_DIR + '.zip'))
+gulp.task('upload', ['compress'], function() {
+  let host = 'http://wapstatic.kf0309.3g.qq.com/upload';
+  let userName = baseConfig.userName;
+  let projName = baseConfig.projectName;
+  let dir = args.d || args.dir || process.env.PUBLISH_DIR;
+
+  return gulp.src(path.join(process.env.PWD, `${dir}.zip`))
     .pipe(upload({
       url: host,
       data: {
         type: 'zip',
         to: `/data/wapstatic/${userName}/${projName}`
       },
-      callback: function() {
-        del.sync(path.join(
-          process.env.PWD, process.env.PUBLISH_DIR, process.env.PUBLISH_DIR + '.zip'),
-          { force: true }
-        );
-      },
       timeout: 15000
     }).on('error', function(err) {
       console.error(chalk.red(err));
     }).on('end', function() {
-      gutil.log(chalk.yellow(`Served at: `));
-      gutil.log(chalk.yellow(
+      del.sync(path.join(
+        process.env.PWD, `${dir}.zip`),
+        { force: true }
+      );
+      gutil.log(chalk.green(`Served at: `));
+      gutil.log(chalk.green(
         `http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/`));
     }));
 });
@@ -233,12 +235,20 @@ gulp.task('clean_tmp', ['css_img', 'cp_js', 'cp_jade_to_html'], function() {
 });
 
 //构建到publish
-gulp.task('publish', ['css_img', 'cp_img', 'cp_library', 'cp_font', 'cp_js', 'cp_jade_to_html'], function (done) {
-  del.sync(path.join(process.env.PWD, devDir, '**'), { force: true });
-  const fullDevDir = path.join(process.env.PWD, devDir)
-  fs.mkdirSync(fullDevDir);
-  fs.createReadStream(path.resolve(__dirname, 'lib/react/react_dev.js'))
-    .pipe(fs.createWriteStream(path.join(fullDevDir, 'react.js')));
-  console.log("Finished publish...");
-  console.log("Success!");
+gulp.task('publish', ['css_img', 'cp_img', 'cp_library', 'cp_font', 'cp_js', 'cp_jade_to_html'],
+  function (done) {
+    if (!args.debug) {
+      del.sync(path.join(process.env.PWD, devDir, '**'), { force: true });
+      const fullDevDir = path.join(process.env.PWD, devDir)
+      fs.mkdirSync(fullDevDir);
+      fs.createReadStream(path.resolve(__dirname, 'lib/react/react_dev.js'))
+        .pipe(fs.createWriteStream(path.join(fullDevDir, 'react.js')));
+    }
+    console.log("Finished publish...");
+    console.log("Success!");
+  }
+);
+
+gulp.task('default', function() {
+  console.log('args:', args);
 });
