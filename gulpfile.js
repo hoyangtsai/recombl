@@ -153,9 +153,10 @@ gulp.task('cp_library', ['css_img'], function (done) {
 });
 
 gulp.task('cp_js', ['css_img'], function (done) {
+  gulp.src(path.join(__dirname, 'lib/react/react.js'))
+      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'js')));
   let filePath = [
     '!' + path.join(process.env.PWD, devDir, 'react.js'),
-    path.join(__dirname, 'lib/react/react.js'),
     '!' + path.join(process.env.PWD, devDir, 'ssr', baseConfig.path, '**/*.js'),
     path.join(process.env.PWD, devDir, baseConfig.path, '**/*.js')
   ];
@@ -164,7 +165,7 @@ gulp.task('cp_js', ['css_img'], function (done) {
 });
 
 gulp.task('cp_jade_to_html', ['css_img'], function (done) {
-  let filePath = path.join(process.env.PWD, devDir, 'ssr', '**/*.jade')
+  let filePath = path.join(process.env.PWD, devDir, 'ssr', baseConfig.path, '**/*.jade')
   return gulp.src(filePath)
       .pipe(replace(/_tmp\/.+\.js\.css/g, function(match) {
         return match.replace(".js.css", ".css");
