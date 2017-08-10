@@ -1,4 +1,4 @@
-const spawn = require('child_process').spawn;
+const spawn = require('cross-spawn');
 const Promise = require('bluebird');
 const CacheStream = require('./cache_stream');
 
