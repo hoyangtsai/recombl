@@ -2,6 +2,7 @@ module.exports = {
   jsPath: "client/container",
   stylePath: "client/style",
   htmlPath: "client/html",
+  imgPath: "client/image",
   projectName: "foobar",
   userName: "ben",
   sprites: {
