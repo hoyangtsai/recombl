@@ -128,11 +128,13 @@ gulp.task('css_img', function (done) {
 });
 
 gulp.task('cp_img', ['css_img'], function (done) {
-  gulp.src(path.join(process.env.PWD, baseConfig.imgPath, baseConfig.path, '**'))
+  let imgPath = baseConfig.imgPath ? baseConfig.imgPath : 'client/image';
+
+  gulp.src(path.join(process.env.PWD, imgPath, baseConfig.path, '**'))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image', baseConfig.path)));
-  gulp.src(path.join(process.env.PWD, devDir, 'client/container', baseConfig.path, '**'))
-      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css/client/container', baseConfig.path)));  //处理项目级组件的资源文件
-  return gulp.src([path.join(process.env.PWD, baseConfig.imgPath, 'common/**')])
+  gulp.src(path.join(process.env.PWD, devDir, baseConfig.jsPath, baseConfig.path, '**'))
+      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css', baseConfig.jsPath , baseConfig.path)));  //处理项目级组件的资源文件
+  return gulp.src([path.join(process.env.PWD, imgPath, 'common/**')])
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'image/common')));
 });
 
