@@ -7,14 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <title>{__htmlTitle__}</title>
-    <!--__css__<link rel="stylesheet" type="text/css" href="{__cssLayer__}css{__path__}/common.css">
-    <link rel="stylesheet" type="text/css" href="{__cssLayer__}css{__path__}/{__cssName__}.css">__css__-->
+    <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
     <div class="wrapper"></div>
-    <script src="{__jsLayer__}{__devDir__}/react.js"></script>
-    <!--__script__<script src="{__jsLayer__}{__devDir__}{__path__}/common.js"></script>__script__-->
-    <script src="{__jsLayer__}{__devDir__}{__path__}/{__jsName__}.js"></script>
+    <div><%= htmlWebpackPlugin.options.reactjs %></div>
+    <script src="/_tmp/react.js"></script>
   </body>
 </html>
