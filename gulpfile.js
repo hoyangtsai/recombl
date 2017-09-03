@@ -145,7 +145,7 @@ gulp.task('cp_font', function (done) {
 
 gulp.task('cp_library', ['css_img'], function (done) {
   gulp.src(path.join(process.env.PWD, devDir, baseConfig.path, 'node_modules', '**'))
-      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, baseConfig.path, 'html/node_modules')));
+      .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, baseConfig.path, 'node_modules')));
   let cpPath = path.join(process.env.PWD, devDir, baseConfig.path, '/_/**');
   if (!!libraryResourcePath) {
     cpPath = path.join(process.env.PWD, devDir, baseConfig.path, libraryResourcePath.substring(5) + '**');
@@ -233,12 +233,12 @@ gulp.task('upload', ['compress'], function() {
     }));
 });
 
-gulp.task('clean_tmp', ['css_img', 'cp_js', 'cp_jade_to_html'], function() {
+gulp.task('clean_tmp', ['css_img', 'cp_jade_to_html'], function() {
   del.sync(path.join(process.env.PWD, devDir, '**'), { force: true });
 });
 
 //构建到publish
-gulp.task('publish', ['css_img', 'cp_img', 'cp_library', 'cp_font', 'cp_js', 'cp_jade_to_html'],
+gulp.task('publish', ['css_img', 'cp_img', 'cp_library', 'cp_font', 'cp_jade_to_html'],
   function (done) {
     if (!args.debug) {
       del.sync(path.join(process.env.PWD, devDir, '**'), { force: true });
