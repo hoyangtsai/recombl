@@ -24,12 +24,6 @@ module.exports = {
       }
     }
   },
-  browsersList: [
-    'last 4 versions',
-    'Android >= 4.0',
-    'Chrome >= 37',
-    'iOS>=7'
-  ],
   postcss: {__postcss__}, //true or false
   pageConfig: "config/pageConfig.js",
   devDirectory: "_tmp"
