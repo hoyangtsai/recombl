@@ -1,0 +1,25 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "Project created by reco",
+  "scripts": {
+    "dev": "reco serve --open",
+    "build": "reco build",
+    "new": "reco new",
+    "upload": "reco upload"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5"
+  },
+  "devDependencies": {
+    "file-loader": "^0.11.2"
+  },
+  "author": "",
+  "license": "ISC",
+  "browserslist": [
+    "last 4 versions",
+    "Android >= 4.0",
+    "Chrome >= 37",
+    "iOS>=7"
+  ]
+}
