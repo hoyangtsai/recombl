@@ -2,3 +2,4 @@ node_modules
 *.log
 __**
 yarn.lock
+package-lock.json
