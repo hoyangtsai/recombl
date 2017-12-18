@@ -207,7 +207,7 @@ gulp.task('compress', function(cb) {
 });
 
 gulp.task('upload', ['compress'], function() {
-  let host = 'http://wapstatic.kf0309.3g.qq.com/upload';
+  let host = 'http://wapstatic.sparta.html5.qq.com/upload';
   let userName = baseConfig.userName;
   let projName = baseConfig.projectName;
   let dir = args.d || args.dir || process.env.PUBLISH_DIR;
@@ -219,7 +219,7 @@ gulp.task('upload', ['compress'], function() {
         type: 'zip',
         to: `/data/wapstatic/${userName}/${projName}`
       },
-      timeout: 15000
+      timeout: 30000
     }).on('error', function(err) {
       console.error(chalk.red(err));
     }).on('end', function() {
@@ -229,7 +229,7 @@ gulp.task('upload', ['compress'], function() {
       );
       gutil.log(chalk.green(`Served at: `));
       gutil.log(chalk.green(
-        `http://wapstatic.kf0309.3g.qq.com/${userName}/${projName}/`));
+        `http://wapstatic.sparta.html5.qq.com/${userName}/${projName}/`));
     }));
 });
 
