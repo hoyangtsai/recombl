@@ -7,7 +7,7 @@
     "test": "mocha test/index.js"
   },
   "bin": {
-    "reco": "./bin/reco"
+    "reco1": "./bin/reco1"
   },
   "repository": {
     "type": "git",
