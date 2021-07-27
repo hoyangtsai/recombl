@@ -5,11 +5,11 @@ const sprites = require('postcss-sprites');
 const replace = require('gulp-replace');
 const rename = require('gulp-rename');
 const prettify = require('gulp-jsbeautifier');
-const base64 = require('gulp-base64');
+// const base64 = require('gulp-base64');
 const zip = require('gulp-zip');
 const upload = require('gulp-file-post');
 const del = require('del');
-const cssnano = require('gulp-cssnano');
+// const cssnano = require('gulp-cssnano');
 const fs = require('fs');
 const path = require('path');
 const request = require('request');
@@ -82,12 +82,12 @@ gulp.task('css_img', function (done) {
 
   return gulp.src(path.join(process.env.PWD, devDir, baseConfig.path, '*.css'))
       .pipe(postcss([sprites(opts)]))//合并雪碧图
-      .pipe(base64({//图片base64
-        extensions: [/\.__inline\.png$/i, /\.__inline\.svg$/i, /\.__inline\.jpe?g$/i, /\.__inline\.ttf$/i],
-        deleteAfterEncoding: false,
-        maxImageSize: 100*1024,
-        debug: false
-      }))
+      // .pipe(base64({ // 图片base64
+      //   extensions: [/\.__inline\.png$/i, /\.__inline\.svg$/i, /\.__inline\.jpe?g$/i, /\.__inline\.ttf$/i],
+      //   deleteAfterEncoding: false,
+      //   maxImageSize: 100*1024,
+      //   debug: false
+      // }))
       .pipe(replace(/url\([^_:\n\r]+\/image\//gi, function(match) {
           let str = match.toLowerCase();
           if (str.indexOf('url(//') > -1) {
@@ -116,14 +116,14 @@ gulp.task('css_img', function (done) {
         return path;
       }))
       // .pipe(gcmq())
-      .pipe(cssnano({
-        discardUnused: false,
-        reduceIdents: false,
-        mergeIdents: false,
-        zindex: false,
-        core: args.m || args.minimize ? true : false,//是否压缩
-        autoprefixer: false
-      }))
+      // .pipe(cssnano({
+      //   discardUnused: false,
+      //   reduceIdents: false,
+      //   mergeIdents: false,
+      //   zindex: false,
+      //   core: args.m || args.minimize ? true : false, //是否压缩
+      //   autoprefixer: false
+      // }))
       .pipe(gulp.dest(path.join(process.env.PWD, process.env.PUBLISH_DIR, 'css', baseConfig.path)));
 });
 
